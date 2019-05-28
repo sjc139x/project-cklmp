@@ -21,7 +21,6 @@ import android.widget.Button
 import com.google.android.gms.maps.model.MapStyleOptions
 
 
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
     override fun onMarkerClick(p0: Marker?) = false
@@ -51,13 +50,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map.setOnMarkerClickListener(this)
         placeMarkerButton = findViewById<Button>(R.id.drop_vid_button)
 
+        // Places a marker on the map on the click of a button, centres camera, no zooming
         placeMarkerButton.setOnClickListener { view ->
             fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
                 if (location != null) {
                     lastLocation = location
                     val currentLatLng = LatLng(location.latitude, location.longitude)
                     placeMarkerOnMap(currentLatLng)
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                    map.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
                 }
             }
         }
@@ -91,13 +91,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             return
         }
 
+        // Goes to your current location and zoom in when you turn the app on
         map.isMyLocationEnabled = true
+        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+            if (location != null) {
+                lastLocation = location
+                val currentLatLng = LatLng(location.latitude, location.longitude)
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+            }
+        }
+
 
     }
 
-
+    // Places marker on map adds marker title as the latitude/longitude
     private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location).title("Northcoders")
+        val markerOptions = MarkerOptions().position(location).title("$location")
         map.addMarker(markerOptions)
     }
 
