@@ -11,7 +11,7 @@ A location-based video messaging app - planned and created as part of a final pr
 
 ### To get a copy of this project running on your local machine:
 
-You must create an api_key.xml file in the app/res/values folder in order to use the google maps API. Paste the following into the file replacing API_KEY_HERE with your own API key from https://developers.google.com/maps/documentation/javascript/get-api-key
+You must create an api_key.xml Values resource file in the app/res/values folder in order to use the google maps API. Paste the following into the file replacing API_KEY_HERE with your own API key from https://developers.google.com/maps/documentation/javascript/get-api-key
 
 
 ```js
