@@ -17,6 +17,6 @@ You must create an api_key.xml file in the app/res/values folder in order to use
 ```js
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <string name="api_key">YOUR_CODE_HERE</string>
+   <string name="api_key">API_KEY_HERE</string>
 </resources>
 ```
