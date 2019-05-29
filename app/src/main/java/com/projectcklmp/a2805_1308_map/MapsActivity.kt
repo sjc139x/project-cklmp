@@ -18,6 +18,9 @@ import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import com.google.android.gms.maps.model.*
+import com.google.firebase.auth.FirebaseAuth
+
+
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
