@@ -11,14 +11,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import android.content.res.Resources
+import android.graphics.BitmapFactory
+
 import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.Button
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -107,6 +106,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     // Places marker on map adds marker title as the latitude/longitude
     private fun placeMarkerOnMap(location: LatLng) {
         val markerOptions = MarkerOptions().position(location).title("$location")
+
+        // Changes the pin style
+        markerOptions.icon(
+            BitmapDescriptorFactory.fromBitmap(
+            BitmapFactory.decodeResource(resources, R.mipmap.diamond_pin)))
+
         map.addMarker(markerOptions)
     }
 
