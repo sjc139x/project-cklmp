@@ -110,7 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // Changes the pin style
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
-            BitmapFactory.decodeResource(resources, R.mipmap.diamond_pin)))
+            BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
 
         map.addMarker(markerOptions)
     }
