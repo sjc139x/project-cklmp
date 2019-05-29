@@ -13,15 +13,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-
 import android.util.Log
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import com.google.android.gms.maps.model.*
 import com.google.firebase.auth.FirebaseAuth
-
-
-
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
