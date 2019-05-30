@@ -3,7 +3,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -16,16 +15,16 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
 
-    private lateinit var nameInput: EditText
-    private lateinit var emailInput: EditText
     private lateinit var usernameInput: EditText
+    private lateinit var emailInput: EditText
     private lateinit var passwordInput: EditText
+    private lateinit var confirmPasswordInput: EditText
     private lateinit var registerButton: Button
 
-    private lateinit var name: String
-    private lateinit var email: String
     private lateinit var username: String
+    private lateinit var email: String
     private lateinit var password: String
+    private lateinit var confirmPassword: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +34,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun initialise() {
-        nameInput = findViewById(R.id.name_input_field) as EditText
-        emailInput = findViewById(R.id.email_input_field) as EditText
         usernameInput = findViewById(R.id.username_input_field) as EditText
-        passwordInput = findViewById(R.id.password_input_field) as EditText
+        emailInput = findViewById(R.id.email_input_field) as EditText
+        passwordInput = findViewById(R.id.username_input_field) as EditText
+        confirmPasswordInput = findViewById(R.id.confirm_password_input_field) as EditText
         registerButton = findViewById(R.id.register_button) as Button
 
         database = FirebaseDatabase.getInstance()
@@ -51,13 +50,13 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun createNewAccount() {
-        name = nameInput?.text.toString()
-        email = emailInput?.text.toString()
         username = usernameInput?.text.toString()
+        email = emailInput?.text.toString()
         password = passwordInput?.text.toString()
+        confirmPassword = confirmPasswordInput?.text.toString()
 
-        if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email)
-            && !TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(email)
+            && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)) {
         } else {
             Toast.makeText(this, "do the fings", Toast.LENGTH_SHORT).show()
         }
@@ -71,9 +70,10 @@ class RegisterActivity : AppCompatActivity() {
 //                    verifyEmail();
                     //update user profile information
                     val currentUserDb = databaseReference!!.child(userId)
-                    currentUserDb.child("name").setValue(name)
-                    currentUserDb.child("email").setValue(email)
                     currentUserDb.child("username").setValue(username)
+                    currentUserDb.child("email").setValue(email)
+                    currentUserDb.child("password").setValue(password)
+                    currentUserDb.child("confirmPassword").setValue(confirmPassword)
 
                     updateUserInfoAndUI()
                 } else {

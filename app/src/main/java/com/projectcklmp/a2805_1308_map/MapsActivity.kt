@@ -45,16 +45,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map = googleMap
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
-        placeMarkerButton = findViewById<Button>(R.id.drop_vid_button)
+        placeMarkerButton = findViewById(R.id.drop_vid_button)
 
         // Places a marker on the map on the click of a button, centres camera, no zooming
-        placeMarkerButton.setOnClickListener { view ->
-            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-                if (location != null) {
-                    lastLocation = location
-                    val currentLatLng = LatLng(location.latitude, location.longitude)
-                    placeMarkerOnMap(currentLatLng)
-                    map.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            placeMarkerButton.setOnClickListener {
+                fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+                    if (location != null) {
+                        lastLocation = location
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        placeMarkerOnMap(currentLatLng)
+                        map.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+                    }
                 }
             }
         }
@@ -108,7 +114,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // Changes the pin style
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
-            BitmapFactory.decodeResource(resources, R.mipmap.diamond_pin)))
+            BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
 
         map.addMarker(markerOptions)
     }
