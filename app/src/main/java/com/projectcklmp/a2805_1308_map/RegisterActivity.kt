@@ -72,8 +72,6 @@ class RegisterActivity : AppCompatActivity() {
                     val currentUserDb = databaseReference!!.child(userId)
                     currentUserDb.child("username").setValue(username)
                     currentUserDb.child("email").setValue(email)
-                    currentUserDb.child("password").setValue(password)
-                    currentUserDb.child("confirmPassword").setValue(confirmPassword)
 
                     updateUserInfoAndUI()
                 } else {
