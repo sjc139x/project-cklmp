@@ -15,8 +15,8 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.Button
+import android.widget.Switch
 import com.google.android.gms.maps.model.*
-
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -26,6 +26,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
     private lateinit var placeMarkerButton: Button
+    private lateinit var changeView: Switch
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -46,6 +47,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
         placeMarkerButton = findViewById(R.id.drop_vid_button)
+        changeView = findViewById(R.id.change_detail)
 
         // Places a marker on the map on the click of a button, centres camera, no zooming
         if (ActivityCompat.checkSelfPermission(
@@ -65,10 +67,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
 
+        // Added detail view switch to run a function on change
+        changeView.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                changeMapViewDetail(googleMap)
+            } else {
+                changeMapViewSimple(googleMap)
+            }
+        }
+
         try {
             val success = googleMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.map_style
+                    this, R.raw.map_style_less_landmarks
                 )
             )
             if (!success) {
@@ -117,6 +128,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
 
         map.addMarker(markerOptions)
+    }
+
+    // Show map view without landmarks
+    private fun changeMapViewSimple(googleMap: GoogleMap) {
+        try {
+            val success = googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.map_style_less_landmarks
+                )
+            )
+            if (!success) {
+                Log.e("MapsActivity", "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("MapsActivity", "Can't find style. Error: ", e)
+        }
+    }
+
+    // Show map view with landmarks
+    private fun changeMapViewDetail(googleMap: GoogleMap) {
+        try {
+            val success = googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.map_style
+                )
+            )
+            if (!success) {
+                Log.e("MapsActivity", "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("MapsActivity", "Can't find style. Error: ", e)
+        }
     }
 
 }
