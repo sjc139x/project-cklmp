@@ -8,5 +8,5 @@
     <string name="register_password_input">password</string>
     <string name="register_confirm_password_input">password</string>
     <string name="login_button">log in</string>
-    <string name="register_link_text">register</string>
+    <string name="register_link_text">sign up</string>
 </resources>
