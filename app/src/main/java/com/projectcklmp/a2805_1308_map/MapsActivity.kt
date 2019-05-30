@@ -1,5 +1,7 @@
 package com.projectcklmp.a2805_1308_map
 
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.support.v7.app.AppCompatActivity
@@ -13,15 +15,27 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
     override fun onMarkerClick(p0: Marker?) = false
+    internal var storage = FirebaseStorage.getInstance()
 
+    internal var storageRef = storage.getReference() //gets reference to firebase
+    private var mStorageRef: StorageReference? = null
+    private val videoUri: Uri? = null //declares the video URI
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
@@ -40,6 +54,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
+    //this is the onclick
+
+
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -106,12 +124,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     }
-
+    private val VIDEO_REQUEST = 101 //no idea what this does
     // Places marker on map adds marker title as the latitude/longitude
     private fun placeMarkerOnMap(location: LatLng) {
+        val videoIntent =
+            Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
+        if (videoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(videoIntent, VIDEO_REQUEST)
+        }
         val markerOptions = MarkerOptions().position(location).title("$location")
 
-        // Changes the pin style
+
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
             BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
@@ -119,4 +142,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map.addMarker(markerOptions)
     }
 
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+      Log.d("odjsojsdoa", "GOT TO FUNCTION")
+        if (requestCode == VIDEO_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (data != null && data.data != null) {
+                mStorageRef = FirebaseStorage.getInstance().reference
+
+                val file = data.data
+                val riversRef = storageRef.child("images/rivers.jpg")
+                riversRef.putFile(file!!).addOnSuccessListener {
+                    // Get a URL to the uploaded content
+                    Log.d("ij", "ijoj")
+                }
+            }
+        }
+    }
 }
+
+
+

@@ -1,5 +1,6 @@
 package com.projectcklmp.a2805_1308_map
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log
 import android.view.View
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.storage.FirebaseStorage
 
 import kotlinx.android.synthetic.main.activity_camera.*
 
@@ -51,5 +53,5 @@ class CameraActivity : AppCompatActivity() {
 //                // Get a URL to the uploaded content
 //                Log.d("ij", "ijoj")
 //            })
-//        }
+//        }}}
 
