@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         emailInput = findViewById(R.id.login_email_input_field) as EditText
         password = findViewById(R.id.login_password_input_field) as EditText
 
-        loginButton.setOnClickListener{loginUser()}
+        loginButton.setOnClickListener { loginUser() }
 
     }
 
@@ -53,31 +53,30 @@ class LoginActivity : AppCompatActivity() {
         enteredEmail = emailInput.text.toString()
         enteredPassword = password.text.toString()
 
-        if (!TextUtils.isEmpty(enteredEmail) && !TextUtils.isEmpty(enteredPassword)){
+        if (!TextUtils.isEmpty(enteredEmail) && !TextUtils.isEmpty(enteredPassword)) {
 
-         auth.signInWithEmailAndPassword(enteredEmail!!, enteredPassword!!)
-             .addOnCompleteListener(this){task ->
+            auth.signInWithEmailAndPassword(enteredEmail!!, enteredPassword!!)
+                .addOnCompleteListener(this) { task ->
 
-                 if (task.isSuccessful){
+                    if (task.isSuccessful) {
 
-                     updateUI(MapsActivity::class.java)
+                        updateUI(MapsActivity::class.java)
 
-                 } else {
+                    } else {
 
-                     Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
 
-                 }
+                    }
 
 
-
-             }
+                }
 
         }
 
 
     }
 
-    private fun updateUI(activity: Class<*>  ) {
+    private fun updateUI(activity: Class<*>) {
         val intent = Intent(this, activity)
         startActivity(intent)
     }
