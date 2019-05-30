@@ -3,8 +3,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="button_label_place_marker">Place A Marker</string>
     <string name="register_button">register</string>
-    <string name="register_name_input">name</string>
-    <string name="register_username_input">choose a username</string>
+    <string name="register_username_input">username</string>
     <string name="register_email_input">email</string>
     <string name="register_password_input">password</string>
+    <string name="register_confirm_password_input">password</string>
+    <string name="login_button">log in</string>
+    <string name="register_link_text">register</string>
 </resources>
