@@ -14,8 +14,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-import kotlinx.android.synthetic.main.activity_camera.*
+//import kotlinx.android.synthetic.main.activity_camera.*
 import android.view.KeyEvent.KEYCODE_BACK
+import android.widget.Toast
+
+
 
 
 class CameraActivity : AppCompatActivity() {
@@ -25,36 +28,25 @@ class CameraActivity : AppCompatActivity() {
     internal val storage = FirebaseStorage.getInstance()
     internal var storageRef = storage.getReference()
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-        }
-        return super.onKeyDown(keyCode, event)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
-        setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-        openCamera()
-    }
-
-    private fun openCamera() {
         val videoIntent =
             Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
         if (videoIntent.resolveActivity(getPackageManager()) != null) {
+            Log.d("hi", "hi")
             startActivityForResult(videoIntent, VIDEO_REQUEST)
         }
+
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        goToMap(MapsActivity::class.java)
+        Log.d("hello", "hello")
+        finish()
         if (requestCode == VIDEO_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data != null && data.data != null) {
                 mStorageRef = FirebaseStorage.getInstance().reference
@@ -70,11 +62,8 @@ class CameraActivity : AppCompatActivity() {
         }
 
 
-    }
 
-    private fun goToMap(activity: Class<*>  ) {
-        val intent = Intent(this, activity)
-        startActivity(intent)
+
     }
 
 
