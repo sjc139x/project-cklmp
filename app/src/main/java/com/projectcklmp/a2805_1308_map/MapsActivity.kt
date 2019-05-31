@@ -15,12 +15,8 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.Button
-import android.widget.Switch
 import com.google.android.gms.maps.model.*
-<<<<<<< HEAD
-import com.google.firebase.auth.FirebaseAuth
-=======
->>>>>>> 8f6ecb271d4409c6fac11ae1e85ba12eea1963a4
+import android.widget.Switch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
