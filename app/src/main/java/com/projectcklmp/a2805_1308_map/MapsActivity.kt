@@ -1,5 +1,6 @@
 package com.projectcklmp.a2805_1308_map
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.support.v7.app.AppCompatActivity
@@ -125,11 +126,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // Changes the pin style
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
-            BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
-
+                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
+        goToCamera(CameraActivity::class.java)
         map.addMarker(markerOptions)
+
     }
 
+    private fun goToCamera(activity: Class<*>  ) {
+        val intent = Intent(this, activity)
+        startActivity(intent)
+    }
+      
     // Show map view without landmarks
     private fun changeMapViewSimple(googleMap: GoogleMap) {
         try {

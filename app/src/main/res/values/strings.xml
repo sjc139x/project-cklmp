@@ -2,6 +2,7 @@
     <string name="app_name">2805_1308_map</string>
     <string name="title_activity_maps">Map</string>
     <string name="button_label_place_marker">Place A Marker</string>
+    <string name="title_activity_camera">CameraActivity</string>
     <string name="register_button">register</string>
     <string name="register_username_input">username</string>
     <string name="register_email_input">email</string>
