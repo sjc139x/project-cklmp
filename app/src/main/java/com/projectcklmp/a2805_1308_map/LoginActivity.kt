@@ -30,8 +30,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.log_in)
 
         initialise()
-
-
     }
 
     private fun initialise() {
