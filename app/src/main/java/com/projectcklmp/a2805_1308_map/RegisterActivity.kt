@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun initialise() {
         usernameInput = findViewById(R.id.username_input_field) as EditText
         emailInput = findViewById(R.id.email_input_field) as EditText
-        passwordInput = findViewById(R.id.username_input_field) as EditText
+        passwordInput = findViewById(R.id.password_input_field) as EditText
         confirmPasswordInput = findViewById(R.id.confirm_password_input_field) as EditText
         registerButton = findViewById(R.id.register_button) as Button
 
