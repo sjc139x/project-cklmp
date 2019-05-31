@@ -15,8 +15,8 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.Button
-import android.widget.Switch
 import com.google.android.gms.maps.model.*
+import android.widget.Switch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
