@@ -1,5 +1,6 @@
 package com.projectcklmp.a2805_1308_map
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,10 +15,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.android.gms.maps.model.LatLng
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -28,6 +34,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var lastLocation: Location
     private lateinit var placeMarkerButton: Button
     private lateinit var changeView: Switch
+    private val VIDEO_REQUEST = 101
+    private var mStorageRef: StorageReference? = null
+    private val storage = FirebaseStorage.getInstance()
+    private var storageRef = storage.getReference()
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -61,8 +72,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     if (location != null) {
                         lastLocation = location
                         val currentLatLng = LatLng(location.latitude, location.longitude)
-                        placeMarkerOnMap(currentLatLng)
                         map.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
+                        startCamera()
                     }
                 }
             }
@@ -120,23 +131,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     // Places marker on map adds marker title as the latitude/longitude
-    private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location).title("$location")
-
-        // Changes the pin style
-        markerOptions.icon(
-            BitmapDescriptorFactory.fromBitmap(
-                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
-        goToCamera(CameraActivity::class.java)
-        map.addMarker(markerOptions)
+    private fun startCamera() {
+        val videoIntent =
+            Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
+        if (videoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(videoIntent, VIDEO_REQUEST)
+        }
 
     }
 
-    private fun goToCamera(activity: Class<*>  ) {
-        val intent = Intent(this, activity)
-        startActivity(intent)
+
+    // On successful video confirmation
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == VIDEO_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (data != null && data.data != null) {
+                val currentLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                mStorageRef = FirebaseStorage.getInstance().reference
+                val file = data.data
+                val riversRef = storageRef.child("images/rivers.jpg")
+                riversRef.putFile(file!!).addOnSuccessListener {
+                    // Get a URL to the uploaded content
+                    Log.d("ij", "ijoj")
+
+                }
+                // Pin style
+                val markerOptions = MarkerOptions().position(currentLatLng).title("hello")
+                markerOptions.icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                    )
+                )
+                // Add marker to map
+                map.addMarker(markerOptions)
+            }
+        }
     }
-      
+
     // Show map view without landmarks
     private fun changeMapViewSimple(googleMap: GoogleMap) {
         try {
