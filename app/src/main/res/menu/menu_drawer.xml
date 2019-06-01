@@ -68,9 +68,9 @@
                                 android:icon="@mipmap/gem_basic"
                                 android:title="log out" />
                         <item
-                                android:id="@+id/nav_account_delete_account"
+                                android:id="@+id/nav_account_reset_password"
                                 android:icon="@mipmap/gem_basic"
-                                android:title="delete account" />
+                                android:title="reset password" />
                     </group>
                 </menu>
             </item>

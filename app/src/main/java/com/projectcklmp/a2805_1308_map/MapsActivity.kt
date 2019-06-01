@@ -15,7 +15,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.support.design.widget.NavigationView
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
@@ -25,6 +24,7 @@ import android.widget.Button
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -36,6 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var placeMarkerButton: Button
     private lateinit var changeView: Switch
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var auth: FirebaseAuth
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -49,6 +50,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        auth = FirebaseAuth.getInstance()
 
         setUpMenuDrawer()
     }
@@ -70,12 +72,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             // navigation item clicks
             when (menuItem.itemId) {
 
-                R.id.nav_social_friend_list -> {
-                    Toast.makeText(this, "Friend list...", Toast.LENGTH_LONG).show()
+                R.id.nav_account_log_out -> {
+                    auth.signOut()
+                    finish()
+                    startActivity(Intent(this, LoginActivity::class.java))
                 }
 
-                R.id.nav_social_add_friend -> {
-                    Toast.makeText(this, "Add a mate...", Toast.LENGTH_LONG).show()
+                R.id.nav_account_reset_password -> {
+                    sendPasswordResetEmail()
                 }
 
             }
@@ -87,7 +91,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
+    private fun sendPasswordResetEmail() {
+        val userEmail = auth.currentUser!!.email
+        auth.sendPasswordResetEmail(userEmail!!)
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Email sent.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             android.R.id.home -> {
                 drawerLayout.openDrawer(GravityCompat.START)
