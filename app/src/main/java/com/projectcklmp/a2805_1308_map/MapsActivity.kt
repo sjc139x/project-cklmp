@@ -15,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.support.design.widget.NavigationView
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
@@ -69,15 +70,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             // navigation item clicks
             when (menuItem.itemId) {
 
-                R.id.nav_example -> {
-                    Toast.makeText(this, "Example...", Toast.LENGTH_LONG).show()
+                R.id.nav_social_friend_list -> {
+                    Toast.makeText(this, "Friend list...", Toast.LENGTH_LONG).show()
+                }
+
+                R.id.nav_social_add_friend -> {
+                    Toast.makeText(this, "Add a mate...", Toast.LENGTH_LONG).show()
                 }
 
             }
-            // Add code here to update the UI based on the item selected
 
             true
+
         }
+        // Add code here to update the UI based on the item selected
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -173,13 +180,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         // Changes the pin style
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
-                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)))
+                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+            )
+        )
         goToCamera(CameraActivity::class.java)
         map.addMarker(markerOptions)
 
     }
 
-    private fun goToCamera(activity: Class<*>  ) {
+    private fun goToCamera(activity: Class<*>) {
         val intent = Intent(this, activity)
         startActivity(intent)
     }
