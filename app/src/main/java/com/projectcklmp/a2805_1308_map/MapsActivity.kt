@@ -14,10 +14,16 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBar
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
+import android.widget.Toast
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -28,6 +34,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var lastLocation: Location
     private lateinit var placeMarkerButton: Button
     private lateinit var changeView: Switch
+    private lateinit var drawerLayout: DrawerLayout
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -36,11 +43,51 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        setUpMenuDrawer()
+    }
+
+    private fun setUpMenuDrawer() {
+        val actionbar: ActionBar? = supportActionBar
+        actionbar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(null)
+        }
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawerLayout.closeDrawers()
+
+            // navigation item clicks
+            when (menuItem.itemId) {
+
+                R.id.nav_example -> {
+                    Toast.makeText(this, "Example...", Toast.LENGTH_LONG).show()
+                }
+
+            }
+            // Add code here to update the UI based on the item selected
+
+            true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                drawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -136,7 +183,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         val intent = Intent(this, activity)
         startActivity(intent)
     }
-      
+
     // Show map view without landmarks
     private fun changeMapViewSimple(googleMap: GoogleMap) {
         try {
