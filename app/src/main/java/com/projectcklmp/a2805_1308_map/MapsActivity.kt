@@ -178,6 +178,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 databaseReference = database!!.reference!!.child("markers").push()
                 auth = FirebaseAuth.getInstance()
 
+
                 databaseReference.child("user").setValue(currentUser.email)
                 databaseReference.child("latLng").setValue(currentLatLng)
 
@@ -243,14 +244,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
 
-                    val places = LatLng(latForMarker as Double, lngForMarker as Double)
-                    val markerOptions = MarkerOptions().position(places).title(userForMarker as String?)
-                    markerOptions.icon(
-                        BitmapDescriptorFactory.fromBitmap(
-                            BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                    if (userForMarker != null && latForMarker != null && lngForMarker != null) {
+                        val places = LatLng(latForMarker as Double, lngForMarker as Double)
+                        val markerOptions = MarkerOptions().position(places).title(userForMarker as String?)
+                        markerOptions.icon(
+                            BitmapDescriptorFactory.fromBitmap(
+                                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                            )
                         )
-                    )
-                    map.addMarker(markerOptions)
+                        map.addMarker(markerOptions)
+                    }
                 }
             }
 
