@@ -152,7 +152,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-
     // On successful video confirmation
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == VIDEO_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -243,8 +242,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     val userForMarker = it.child("user").value
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
-
-                    println("TestBed2: $lngForMarker")
 
                     val places = LatLng(latForMarker as Double, lngForMarker as Double)
                     val markerOptions = MarkerOptions().position(places).title(userForMarker as String?)
