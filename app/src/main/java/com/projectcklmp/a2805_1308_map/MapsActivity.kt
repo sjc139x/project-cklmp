@@ -20,9 +20,14 @@ import android.util.Log
 import android.widget.Button
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
+import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -38,6 +43,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private var mStorageRef: StorageReference? = null
     private val storage = FirebaseStorage.getInstance()
     private var storageRef = storage.getReference()
+    private lateinit var currentUser: FirebaseUser
+    private lateinit var database: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var auth: FirebaseAuth
+
+
 
 
     companion object {
@@ -46,6 +57,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getCurrentUser()
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -155,16 +167,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 }
                 // Pin style
-                val markerOptions = MarkerOptions().position(currentLatLng).title("hello")
+                val markerOptions = MarkerOptions().position(currentLatLng).title(currentUser.email)
                 markerOptions.icon(
                     BitmapDescriptorFactory.fromBitmap(
                         BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
                     )
                 )
+
+                // Add object to firebase
+                database = FirebaseDatabase.getInstance()
+                databaseReference = database!!.reference!!.child("markers").push()
+                auth = FirebaseAuth.getInstance()
+
+                databaseReference.child("user").setValue(currentUser.email)
+                databaseReference.child("latLng").setValue(currentLatLng)
+
+
                 // Add marker to map
                 map.addMarker(markerOptions)
             }
         }
+    }
+
+
+    private fun getCurrentUser() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            currentUser = user
+        } else {
+            Toast.makeText(this, "No user is signed in", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     // Show map view without landmarks

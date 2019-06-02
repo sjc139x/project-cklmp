@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1097421668484-v83dsqmhjavl0mno14fcpmhukhs53e44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.projectcklmp.a2805_1308_map",
+            "certificate_hash": "fba0798d64d5dacde4066425ea9504c6cf15255c"
+          }
+        },
+        {
           "client_id": "1097421668484-idc5a2q2tc3bnja0gu32b17jkbgpu9s3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
