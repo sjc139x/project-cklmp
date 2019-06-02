@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
+import android.text.TextUtils.indexOf
 import android.util.Log
 import android.widget.Button
 import com.google.android.gms.maps.model.*
@@ -26,8 +27,8 @@ import com.google.firebase.storage.StorageReference
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.projectcklmp.a2805_1308_map.models.Markers
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -49,8 +50,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var auth: FirebaseAuth
 
 
-
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
@@ -64,6 +63,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Get markers from firebase
+        getMarkers()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -138,11 +140,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
             }
         }
-
-
     }
 
-    // Places marker on map adds marker title as the latitude/longitude
+    // Starts the camera intent
     private fun startCamera() {
         val videoIntent =
             Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
@@ -231,5 +231,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             Log.e("MapsActivity", "Can't find style. Error: ", e)
         }
     }
+
+
+    private fun getMarkers() {
+        databaseReference = FirebaseDatabase.getInstance().getReference()
+        databaseReference.child("markers").addValueEventListener(object : ValueEventListener {
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val markers = snapshot.children
+                markers.forEach {
+                    val userForMarker = it.child("user").value
+                    val latForMarker = it.child("latLng").child("latitude").value
+                    val lngForMarker = it.child("latLng").child("longitude").value
+
+                    println("TestBed2: $lngForMarker")
+
+                    val places = LatLng(latForMarker as Double, lngForMarker as Double)
+                    val markerOptions = MarkerOptions().position(places).title(userForMarker as String?)
+                    markerOptions.icon(
+                        BitmapDescriptorFactory.fromBitmap(
+                            BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                        )
+                    )
+                    map.addMarker(markerOptions)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("TAG", "listener:onCancelled", databaseError.toException())
+            }
+        })
+    }
+
 
 }
