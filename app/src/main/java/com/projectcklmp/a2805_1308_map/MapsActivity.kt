@@ -24,6 +24,7 @@ import android.widget.Button
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
 import android.widget.Toast
+import android.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -71,6 +72,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
             // navigation item clicks
             when (menuItem.itemId) {
+
+                R.id.nav_social_friend_list -> {
+                    finish()
+                    startActivity(Intent(this, FriendsActivity::class.java))
+                }
 
                 R.id.nav_account_log_out -> {
                     auth.signOut()

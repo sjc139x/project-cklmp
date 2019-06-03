@@ -4,7 +4,8 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent">
 
-        <group android:checkableBehavior="single" android:layout_width="wrap_content"
+
+    <group android:checkableBehavior="single" android:layout_width="wrap_content"
                android:layout_height="wrap_content">
             <item android:title="SOCIAL">
                 <menu>
