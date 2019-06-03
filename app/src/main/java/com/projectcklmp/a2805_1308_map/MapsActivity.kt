@@ -32,21 +32,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.UploadTask
+import kotlinx.android.synthetic.main.activity_maps.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
-
-
-    override fun onMarkerClick(p0: Marker?): Boolean {
-        Log.d("sausage","Joe waz ere")
-
-            val playIntent = Intent(this, VideoPlayer::class.java)
-            //playIntent.putExtra("videoUri", videoUri.toString());
-            startActivity(playIntent)
-
-        return true
-    }
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -61,6 +51,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val url = "${marker.title}".split(" ")
+
+        Log.d("sausage","${url[1]}")
+
+            val playIntent = Intent(this, VideoPlayer::class.java)
+            playIntent.putExtra("videoUri", url[1]);
+            startActivity(playIntent)
+
+        return true
+    }
+
+
 
 
     companion object {
@@ -193,12 +198,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                             val downloadUri = task.result.toString()
 
                             // Pin style
-                            val markerOptions = MarkerOptions().position(currentLatLng).title(currentUser.email)
-                            markerOptions.icon(
-                                BitmapDescriptorFactory.fromBitmap(
-                                    BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
-                                )
-                            )
+
 
                             // Add object to firebase
                             database = FirebaseDatabase.getInstance()
@@ -210,10 +210,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                                 databaseReference.child("latLng").setValue(currentLatLng)
                                 databaseReference.child("color").setValue("blue")
                                 databaseReference.child("url").setValue(downloadUri)
+
+
+
+                                val markerOptions = MarkerOptions().position(currentLatLng).title("${currentUser.email} $downloadUri" )
+                                markerOptions.icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                                    )
+                                )
+
+
+                                // Add marker to map
+                                map.addMarker(markerOptions)
                             }
 
-                            // Add marker to map
-                            map.addMarker(markerOptions)
                         }
 
                     }
@@ -279,11 +290,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     val userForMarker = it.child("user").value
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
+                    val urlForMarker = it.child("url").value
 
 
-                    if (userForMarker != null && latForMarker != null && lngForMarker != null) {
+                    if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null) {
                         val places = LatLng(latForMarker as Double, lngForMarker as Double)
-                        val markerOptions = MarkerOptions().position(places).title(userForMarker as String?)
+                        val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
                         markerOptions.icon(
                             BitmapDescriptorFactory.fromBitmap(
                                 BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
