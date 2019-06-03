@@ -17,6 +17,7 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat.startActivityForResult
 import android.text.TextUtils.indexOf
 import android.util.Log
 import android.widget.Button
@@ -37,7 +38,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
 
 
-    override fun onMarkerClick(p0: Marker?) = false
+    override fun onMarkerClick(p0: Marker?): Boolean {
+        Log.d("sausage","Joe waz ere")
+
+            val playIntent = Intent(this, VideoPlayer::class.java)
+            //playIntent.putExtra("videoUri", videoUri.toString());
+            startActivity(playIntent)
+
+        return true
+    }
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
