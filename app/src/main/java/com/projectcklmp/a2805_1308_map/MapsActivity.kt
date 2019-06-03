@@ -15,6 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.provider.MediaStore
 import android.text.TextUtils.indexOf
 import android.util.Log
@@ -25,14 +26,17 @@ import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-
+import com.google.firebase.storage.UploadTask
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
+
+
     override fun onMarkerClick(p0: Marker?) = false
 
     private lateinit var map: GoogleMap
@@ -148,7 +152,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         val videoIntent =
             Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
-        videoIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+        videoIntent.putExtra(
+            "android.intent.extras.CAMERA_FACING",
+            android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT
+        );
+        //videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         videoIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
         videoIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
         if (videoIntent.resolveActivity(getPackageManager()) != null) {
@@ -165,12 +173,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 mStorageRef = FirebaseStorage.getInstance().reference
                 val file = data.data
                 val riversRef = storageRef.child("images/rivers.jpg")
-                riversRef.putFile(file!!).addOnSuccessListener {
-                    // Get a URL to the uploaded content
-                    Log.d("ij", "ijoj")
 
+                riversRef.putFile(file!!).addOnCompleteListener {
+                    // Get a URL to the uploaded content
+                    val downloadURL = riversRef.downloadUrl.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val downloadUri = task.result
+                            Log.d("Hello", "$downloadUri")
+                        }
+                    }
+
+                    Log.d("onactivityresultlog", "UWU")
                 }
                 // Pin style
+
+
                 val markerOptions = MarkerOptions().position(currentLatLng).title(currentUser.email)
                 markerOptions.icon(
                     BitmapDescriptorFactory.fromBitmap(
@@ -186,6 +203,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 databaseReference.child("user").setValue(currentUser.email)
                 databaseReference.child("latLng").setValue(currentLatLng)
+//                databaseReference.child("color").setValue("blue")
+//                databaseReference.child("")
 
 
                 // Add marker to map
@@ -250,6 +269,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     val userForMarker = it.child("user").value
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
+
 
                     if (userForMarker != null && latForMarker != null && lngForMarker != null) {
                         val places = LatLng(latForMarker as Double, lngForMarker as Double)
