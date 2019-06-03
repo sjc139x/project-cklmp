@@ -10,7 +10,7 @@ import com.projectcklmp.a2805_1308_map.R;
 public class VideoPlayer extends Activity {
     private VideoView mVideoView;
 
-    String videoURL = "https://firebasestorage.googleapis.com/v0/b/project-cklmp-657b0.appspot.com/o/images%2Frivers.jpg?alt=media&token=985eabd6-8208-422a-b90d-19ab9cc0e098";
+
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class VideoPlayer extends Activity {
         System.out.println("Hello" + videoUrl);
         setContentView(R.layout.content_video_player);
         mVideoView = findViewById(R.id.VideoView);
-        Uri videoUri =Uri.parse(videoURL);
+        Uri videoUri =Uri.parse(videoUrl);
         mVideoView.setVideoURI(videoUri);
         mVideoView.start();
     }
