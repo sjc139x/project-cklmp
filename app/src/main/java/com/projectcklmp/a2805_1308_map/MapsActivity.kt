@@ -148,19 +148,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     // Starts the camera intent
     private fun startCamera() {
-
-
         val videoIntent =
             Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
         videoIntent.putExtra(
             "android.intent.extras.CAMERA_FACING",
             android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT
         );
-        //videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+        videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
 
-        // Go to front facing camera, this is a hack.
-        // Does not work on all models or versions of android.
-        // A better solution would be to build own CameraActivity
+        /* Go to front facing camera, this is a hack.
+         * Does not work on all models or versions of android.
+         * A better solution would be to build own CameraActivity
+         */
         videoIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
         videoIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
         if (videoIntent.resolveActivity(getPackageManager()) != null) {
@@ -180,39 +179,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
                 riversRef.putFile(file!!).addOnCompleteListener {
                     // Get a URL to the uploaded content
-                    val downloadURL = riversRef.downloadUrl.addOnCompleteListener { task ->
+                    riversRef.downloadUrl.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val downloadUri = task.result
-                            Log.d("Hello", "$downloadUri")
+                            val downloadUri = task.result.toString()
+
+                            // Pin style
+                            val markerOptions = MarkerOptions().position(currentLatLng).title(currentUser.email)
+                            markerOptions.icon(
+                                BitmapDescriptorFactory.fromBitmap(
+                                    BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                                )
+                            )
+
+                            // Add object to firebase
+                            database = FirebaseDatabase.getInstance()
+                            databaseReference = database!!.reference!!.child("markers").push()
+                            auth = FirebaseAuth.getInstance()
+
+                            if (currentUser.email != null && currentLatLng != null && downloadUri != null) {
+                                databaseReference.child("user").setValue(currentUser.email)
+                                databaseReference.child("latLng").setValue(currentLatLng)
+                                databaseReference.child("color").setValue("blue")
+                                databaseReference.child("url").setValue(downloadUri)
+                            }
+
+                            // Add marker to map
+                            map.addMarker(markerOptions)
                         }
+
                     }
-
-                    Log.d("onactivityresultlog", "UWU")
                 }
-                // Pin style
 
-
-                val markerOptions = MarkerOptions().position(currentLatLng).title(currentUser.email)
-                markerOptions.icon(
-                    BitmapDescriptorFactory.fromBitmap(
-                        BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
-                    )
-                )
-
-                // Add object to firebase
-                database = FirebaseDatabase.getInstance()
-                databaseReference = database!!.reference!!.child("markers").push()
-                auth = FirebaseAuth.getInstance()
-
-
-                databaseReference.child("user").setValue(currentUser.email)
-                databaseReference.child("latLng").setValue(currentLatLng)
-//                databaseReference.child("color").setValue("blue")
-//                databaseReference.child("")
-
-
-                // Add marker to map
-                map.addMarker(markerOptions)
             }
         }
     }
@@ -287,7 +284,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     }
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("TAG", "listener:onCancelled", databaseError.toException())
             }
