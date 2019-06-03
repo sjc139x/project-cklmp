@@ -157,6 +157,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT
         );
         //videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+
+        // Go to front facing camera, this is a hack.
+        // Does not work on all models or versions of android.
+        // A better solution would be to build own CameraActivity
         videoIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
         videoIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
         if (videoIntent.resolveActivity(getPackageManager()) != null) {
