@@ -144,8 +144,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     // Starts the camera intent
     private fun startCamera() {
+
+
         val videoIntent =
             Intent(MediaStore.ACTION_VIDEO_CAPTURE)//starts the capturevideo intent, makes a request to the camera2 api
+        videoIntent.putExtra("android.intent.extras.CAMERA_FACING", android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT);
+        videoIntent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
+        videoIntent.putExtra("android.intent.extra.USE_FRONT_CAMERA", true);
         if (videoIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(videoIntent, VIDEO_REQUEST)
         }
@@ -240,6 +245,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             override fun onDataChange(snapshot: DataSnapshot) {
                 val markers = snapshot.children
                 markers.forEach {
+                    // Opens the camera front facing, this is a hack, does nto work on all versions of Android nor on all devices.
+                    // A better solution would be to build a camera activity from scratch
                     val userForMarker = it.child("user").value
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
