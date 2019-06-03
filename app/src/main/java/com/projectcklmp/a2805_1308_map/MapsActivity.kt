@@ -175,7 +175,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 val currentLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
                 mStorageRef = FirebaseStorage.getInstance().reference
                 val file = data.data
-                val riversRef = storageRef.child("images/rivers.jpg")
+                val riversRef = storageRef.child("${currentUser.email}/$currentLatLng.jpg")
 
                 riversRef.putFile(file!!).addOnCompleteListener {
                     // Get a URL to the uploaded content
