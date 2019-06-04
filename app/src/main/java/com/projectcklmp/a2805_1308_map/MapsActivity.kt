@@ -203,16 +203,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                             if (currentUser.email != null && currentLatLng != null && downloadUri != null) {
                                 databaseReference.child("user").setValue(currentUser.email)
                                 databaseReference.child("latLng").setValue(currentLatLng)
-                                databaseReference.child("color").setValue("blue")
+                                databaseReference.child("color").setValue(gemColor)
                                 databaseReference.child("url").setValue(downloadUri)
-
-
 
                                 val markerOptions = MarkerOptions().position(currentLatLng).title("${currentUser.email} $downloadUri" )
                                 markerOptions.icon(
                                     BitmapDescriptorFactory.fromBitmap(
-                                        BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                        when (gemColor) {
+                                            "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                                            "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
+                                            "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
+                                            else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                                        }
                                     )
+
                                 )
 
 
@@ -286,16 +290,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     val urlForMarker = it.child("url").value
                     val colorForMarker = it.child("color").value
 
-                    if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null) {
+                    if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null && colorForMarker == gemColor) {
                         val places = LatLng(latForMarker as Double, lngForMarker as Double)
                         val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
                         markerOptions.icon(
                             BitmapDescriptorFactory.fromBitmap(
                                 when (colorForMarker) {
-                                    "blue" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
-                                    "purple" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
-                                    "red" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
-                                    else -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                    "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                                    "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
+                                    "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
+                                    else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
                                 }
                             )
                         )
