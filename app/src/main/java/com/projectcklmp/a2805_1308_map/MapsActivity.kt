@@ -15,10 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.text.TextUtils.indexOf
 import android.util.Log
 import android.widget.Button
 import com.google.android.gms.maps.model.*
@@ -27,12 +24,9 @@ import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.storage.UploadTask
-import kotlinx.android.synthetic.main.activity_maps.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -51,6 +45,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private var gemColor: String = "blue"
 
 
     override fun onMarkerClick(marker: Marker): Boolean {
@@ -216,7 +211,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                                 val markerOptions = MarkerOptions().position(currentLatLng).title("${currentUser.email} $downloadUri" )
                                 markerOptions.icon(
                                     BitmapDescriptorFactory.fromBitmap(
-                                        BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                                        BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
                                     )
                                 )
 
@@ -285,20 +280,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             override fun onDataChange(snapshot: DataSnapshot) {
                 val markers = snapshot.children
                 markers.forEach {
-                    // Opens the camera front facing, this is a hack, does nto work on all versions of Android nor on all devices.
-                    // A better solution would be to build a camera activity from scratch
                     val userForMarker = it.child("user").value
                     val latForMarker = it.child("latLng").child("latitude").value
                     val lngForMarker = it.child("latLng").child("longitude").value
                     val urlForMarker = it.child("url").value
-
+                    val colorForMarker = it.child("color").value
 
                     if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null) {
                         val places = LatLng(latForMarker as Double, lngForMarker as Double)
                         val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
                         markerOptions.icon(
                             BitmapDescriptorFactory.fromBitmap(
-                                BitmapFactory.decodeResource(resources, R.mipmap.gem_basic)
+                                when (colorForMarker) {
+                                    "blue" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                    "purple" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                    "red" -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                    else -> BitmapFactory.decodeResource(resources, R.mipmap.gem_red)
+                                }
                             )
                         )
                         map.addMarker(markerOptions)
