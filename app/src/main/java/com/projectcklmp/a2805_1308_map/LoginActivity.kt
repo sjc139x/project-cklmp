@@ -1,14 +1,20 @@
 package com.projectcklmp.a2805_1308_map
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.firebase.auth.FirebaseAuth
+import android.support.v4.os.HandlerCompat.postDelayed
+import android.view.Window
+import android.view.Window.FEATURE_NO_TITLE
 
 
 class LoginActivity : AppCompatActivity() {
@@ -29,8 +35,11 @@ class LoginActivity : AppCompatActivity() {
     private var prefPass = "userPass"
     private var prefPassword: String = ""
 
+    private lateinit var dialog: Dialog
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        showSplash()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.log_in)
 
@@ -52,6 +61,14 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    private fun showSplash() {
+        dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.requestWindowFeature(FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.login_splash_screen)
+        dialog.setCancelable(true)
+        dialog.show()
+    }
+
     private fun getUser() {
         val pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         val prefPass = getSharedPreferences(prefPass, Context.MODE_PRIVATE)
@@ -59,6 +76,9 @@ class LoginActivity : AppCompatActivity() {
         val password: String = prefPass.getString(prefPassword, "")
         if (username != "" || password != "") {
             loginUser(username, password, true)
+        }
+        else {
+            dialog.hide()
         }
     }
 
@@ -75,6 +95,7 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         updateUI(MapsActivity::class.java)
+                        dialog.hide()
                     } else {
                         Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
                     }
