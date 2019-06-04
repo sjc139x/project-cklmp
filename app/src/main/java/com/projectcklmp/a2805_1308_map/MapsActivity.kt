@@ -49,6 +49,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var purpleButton: ImageButton
     private lateinit var redButton: ImageButton
     private lateinit var placeMarkerGem: ImageButton
+    private lateinit var storeSnapshot: DataSnapshot
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val url = "${marker.title}".split(" ")
@@ -78,11 +79,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        // Get markers from firebase
-        getMarkers()
-
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -136,16 +132,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
 
         blueButton.setOnClickListener {
-            changeGemColour("blue")
+            changeGemColour("blue",googleMap)
         }
         purpleButton.setOnClickListener {
-            changeGemColour("purple")
+            changeGemColour("purple",googleMap)
         }
         redButton.setOnClickListener {
-            changeGemColour("red")
+            changeGemColour("red",googleMap)
         }
 
         setUpMap()
+
+        // Get markers from firebase
+        getMarkers(googleMap)
     }
 
     private fun setUpMap() {
@@ -294,35 +293,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
 
-    private fun getMarkers() {
+    private fun getMarkers(googleMap: GoogleMap) {
         databaseReference = FirebaseDatabase.getInstance().getReference()
         databaseReference.child("markers").addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val markers = snapshot.children
-                markers.forEach {
-                    val userForMarker = it.child("user").value
-                    val latForMarker = it.child("latLng").child("latitude").value
-                    val lngForMarker = it.child("latLng").child("longitude").value
-                    val urlForMarker = it.child("url").value
-                    val colorForMarker = it.child("color").value
-
-                    if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null && colorForMarker == gemColor) {
-                        val places = LatLng(latForMarker as Double, lngForMarker as Double)
-                        val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
-                        markerOptions.icon(
-                            BitmapDescriptorFactory.fromBitmap(
-                                when (colorForMarker) {
-                                    "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
-                                    "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
-                                    "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
-                                    else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
-                                }
-                            )
-                        )
-                        map.addMarker(markerOptions)
-                    }
-                }
+                storeSnapshot = snapshot
+                loadMarkers(snapshot, googleMap)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("TAG", "listener:onCancelled", databaseError.toException())
@@ -330,7 +307,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         })
     }
 
-    fun changeGemColour(colour: String) {
+     fun loadMarkers(snapshot: DataSnapshot, googleMap: GoogleMap) {
+         map = googleMap
+         map.clear()
+         val markers = snapshot.children
+         markers.forEach {
+             val userForMarker = it.child("user").value
+             val latForMarker = it.child("latLng").child("latitude").value
+             val lngForMarker = it.child("latLng").child("longitude").value
+             val urlForMarker = it.child("url").value
+             val colorForMarker = it.child("color").value
+
+             if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null && colorForMarker == gemColor) {
+                 val places = LatLng(latForMarker as Double, lngForMarker as Double)
+                 val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
+                 markerOptions.icon(
+                     BitmapDescriptorFactory.fromBitmap(
+                         when (colorForMarker) {
+                             "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                             "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
+                             "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
+                             else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                         }
+                     )
+                 )
+                 map.addMarker(markerOptions)
+             }
+         }
+     }
+
+    fun changeGemColour(colour: String, googleMap: GoogleMap) {
         gemColor = colour
         placeMarkerGem = findViewById(R.id.place_marker_gem)
         when (colour) {
@@ -339,6 +345,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             "red" -> placeMarkerGem.setImageResource(R.drawable.gem_red)
             else -> placeMarkerGem.setImageResource(R.drawable.gem_blue)
         }
-        getMarkers()
+        loadMarkers(storeSnapshot, googleMap)
     }
 }
