@@ -17,7 +17,7 @@ import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
+import android.widget.ImageButton
 import com.google.android.gms.maps.model.*
 import android.widget.Switch
 import android.widget.Toast
@@ -35,7 +35,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
-    private lateinit var placeMarkerButton: Button
     private lateinit var changeView: Switch
     private val VIDEO_REQUEST = 101
     private var mStorageRef: StorageReference? = null
@@ -46,7 +45,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var gemColor: String = "blue"
-
+    private lateinit var blueButton: ImageButton
+    private lateinit var purpleButton: ImageButton
+    private lateinit var redButton: ImageButton
+    private lateinit var placeMarkerGem: ImageButton
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val url = "${marker.title}".split(" ")
@@ -79,14 +81,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
         // Get markers from firebase
         getMarkers()
+
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
-        placeMarkerButton = findViewById(R.id.drop_vid_button)
         changeView = findViewById(R.id.change_detail)
+        blueButton = findViewById(R.id.blue_button)
+        purpleButton = findViewById(R.id.purple_button)
+        redButton = findViewById(R.id.red_button)
+        placeMarkerGem = findViewById(R.id.place_marker_gem)
 
         // Places a marker on the map on the click of a button, centres camera, no zooming
         if (ActivityCompat.checkSelfPermission(
@@ -94,7 +101,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            placeMarkerButton.setOnClickListener {
+            placeMarkerGem.setOnClickListener {
                 fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
                     if (location != null) {
                         lastLocation = location
@@ -126,6 +133,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         } catch (e: Resources.NotFoundException) {
             Log.e("MapsActivity", "Can't find style. Error: ", e)
+        }
+
+        blueButton.setOnClickListener {
+            changeGemColour("blue")
+        }
+        purpleButton.setOnClickListener {
+            changeGemColour("purple")
+        }
+        redButton.setOnClickListener {
+            changeGemColour("red")
         }
 
         setUpMap()
@@ -313,5 +330,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         })
     }
 
-
+    fun changeGemColour(colour: String) {
+        gemColor = colour
+        placeMarkerGem = findViewById(R.id.place_marker_gem)
+        when (colour) {
+            "blue" -> placeMarkerGem.setImageResource(R.drawable.gem_blue)
+            "purple" -> placeMarkerGem.setImageResource(R.drawable.gem_purple)
+            "red" -> placeMarkerGem.setImageResource(R.drawable.gem_red)
+            else -> placeMarkerGem.setImageResource(R.drawable.gem_blue)
+        }
+        getMarkers()
+    }
 }
