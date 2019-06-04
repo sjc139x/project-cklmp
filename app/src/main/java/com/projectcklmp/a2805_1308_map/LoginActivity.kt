@@ -55,9 +55,9 @@ class LoginActivity : AppCompatActivity() {
     private fun getUser() {
         val pref = getSharedPreferences(prefName, Context.MODE_PRIVATE)
         val prefPass = getSharedPreferences(prefPass, Context.MODE_PRIVATE)
-        val username = pref.getString(prefUserName, null)
-        val password = prefPass.getString(prefPassword, "")
-        if (username != null || password != null) {
+        val username: String = pref.getString(prefUserName, "")
+        val password: String = prefPass.getString(prefPassword, "")
+        if (username != "" || password != "") {
             loginUser(username, password, true)
         }
     }
