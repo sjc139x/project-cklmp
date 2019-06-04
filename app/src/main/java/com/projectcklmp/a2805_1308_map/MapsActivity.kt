@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_maps.*
+import java.util.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -54,15 +55,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     override fun onMarkerClick(marker: Marker): Boolean {
+
+val mark = marker.position
+
+        val userloc1 = Location("")
+        userloc1.latitude = lastLocation.latitude
+        userloc1.longitude = lastLocation.longitude
+
+        val markerloc2 = Location("")
+        markerloc2.latitude = mark.latitude
+        markerloc2.longitude = mark.longitude
+
+        val distanceInMeters = userloc1.distanceTo(markerloc2)
+
+
+
         val url = "${marker.title}".split(" ")
 
-        Log.d("sausage","${url[1]}")
+        Log.d("sausage","${distanceInMeters}")
+if (distanceInMeters <= 75) {
 
-            val playIntent = Intent(this, VideoPlayer::class.java)
-            playIntent.putExtra("videoUri", url[1]);
-            startActivity(playIntent)
-
-        return true
+    val playIntent = Intent(this, VideoPlayer::class.java)
+    playIntent.putExtra("videoUri", url[1]);
+    startActivity(playIntent)
+}
+        else if(distanceInMeters >= 1000) {
+    Toast.makeText(this, "U R ${Math.round(distanceInMeters/100)/10}km from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show()
+}
+    else{ Toast.makeText(this, "U R ${distanceInMeters}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show() }
+return true
     }
 
 
@@ -73,6 +94,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         getCurrentUser()
         setContentView(R.layout.activity_maps)
