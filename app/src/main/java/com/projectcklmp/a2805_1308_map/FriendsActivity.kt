@@ -22,15 +22,15 @@ class FriendsActivity : AppCompatActivity() {
         val dbRef = FirebaseDatabase.getInstance().reference
         val userRef = dbRef.child("users").child(userId)
         val friendsRef = userRef.child("friends")
+        var friendsList: ArrayList<Any> = arrayListOf()
 
         val valueEventListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val friends = dataSnapshot.children
-                friends.forEach {
-                    Log.d("FriendsActivity", it.toString())
+                val friendsSnapshot = dataSnapshot.children
+                friendsSnapshot.forEach {
+                    friendsList.add("${it.key.toString()}")
                 }
-//                val user = dataSnapshot.getValue(User::class.java)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
