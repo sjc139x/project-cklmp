@@ -16,14 +16,6 @@
 
 
     />
-    <Button
-            android:text="@string/button_label_place_marker"
-            android:layout_width="214dp"
-            android:layout_height="63dp" android:id="@+id/drop_vid_button"
-            android:layout_marginBottom="39dp" android:layout_alignBottom="@+id/map"
-            android:layout_alignRight="@+id/map" android:layout_marginRight="100dp" android:layout_marginEnd="100dp"
-            android:layout_alignEnd="@+id/map" android:layout_alignParentStart="true" android:layout_marginLeft="97dp"
-            android:layout_marginStart="97dp" android:layout_alignParentLeft="true"/>
     <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/change_detail"/>
@@ -31,30 +23,30 @@
             android:src="@drawable/gem_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/red_button" android:background="#00FFFFFF"
-            android:layout_marginBottom="10dp" android:layout_alignBottom="@+id/map"
-            android:layout_alignRight="@+id/map" android:layout_marginRight="-1dp" android:layout_marginEnd="-1dp"
+            android:layout_marginBottom="167dp" android:layout_alignBottom="@+id/map"
+            android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
             android:layout_alignEnd="@+id/map"/>
     <ImageButton
             android:src="@drawable/gem_purple"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/purple_button" android:layout_marginBottom="120dp"
+            android:layout_height="wrap_content" android:id="@+id/purple_button" android:layout_marginBottom="231dp"
             android:layout_alignBottom="@+id/map" android:layout_alignRight="@+id/map"
-            android:layout_marginRight="3dp" android:layout_marginEnd="3dp" android:layout_alignEnd="@+id/map"
+            android:layout_marginRight="7dp" android:layout_marginEnd="7dp" android:layout_alignEnd="@+id/map"
             android:background="#00FFFFFF"/>
     <ImageButton
             android:src="@drawable/gem_blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/blue_button" android:background="#00FFFFFF"
-            android:layout_marginBottom="230dp" android:layout_alignBottom="@+id/map"
-            android:layout_alignRight="@+id/map" android:layout_marginRight="4dp" android:layout_marginEnd="4dp"
+            android:layout_marginBottom="294dp" android:layout_alignBottom="@+id/map"
+            android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
             android:layout_alignEnd="@+id/map"/>
     <ImageButton
             android:src="@drawable/gem_blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/place_marker_gem" android:background="#00FFFFFF"
-            android:layout_marginBottom="128dp" android:layout_alignBottom="@+id/map"
-            android:layout_alignRight="@+id/map" android:layout_marginRight="146dp" android:layout_marginEnd="146dp"
-            android:layout_alignEnd="@+id/map" android:layout_marginLeft="164dp" android:layout_marginStart="164dp"
+            android:layout_marginBottom="27dp" android:layout_alignBottom="@+id/map"
+            android:layout_alignRight="@+id/map" android:layout_marginRight="158dp" android:layout_marginEnd="158dp"
+            android:layout_alignEnd="@+id/map" android:layout_marginLeft="152dp" android:layout_marginStart="152dp"
             android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
 
 
