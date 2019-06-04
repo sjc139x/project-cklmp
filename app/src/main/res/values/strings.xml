@@ -10,4 +10,5 @@
     <string name="register_confirm_password_input">confirm password</string>
     <string name="login_button">log in</string>
     <string name="register_link_text">create account</string>
+    <string name="log_in_remember_me">remember me</string>
 </resources>
