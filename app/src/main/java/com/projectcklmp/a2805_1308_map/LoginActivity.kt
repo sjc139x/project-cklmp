@@ -95,6 +95,7 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         updateUI(MapsActivity::class.java)
+                        dialog.hide()
                     } else {
                         Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
                     }
