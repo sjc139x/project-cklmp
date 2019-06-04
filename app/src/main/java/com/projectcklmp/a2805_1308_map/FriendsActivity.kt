@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_friends.*
+import kotlinx.android.synthetic.main.friend_card.*
 
 class FriendsActivity : AppCompatActivity() {
 
@@ -57,7 +59,6 @@ class FriendsActivity : AppCompatActivity() {
         friendsRef.addListenerForSingleValueEvent(valueEventListener)
 
     }
-
 
 }
 
