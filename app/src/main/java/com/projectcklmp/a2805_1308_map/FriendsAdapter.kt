@@ -40,6 +40,8 @@ class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.CustomViewHolder>() {
 
         friendsRef.child(notFriend).removeValue()
 
+        Log.d("FriendsAdapter", "friendsArray ---> $friendsArray")
+
         Log.d("FriendsAdapter", "friend to delete ----> $notFriend")
     }
 

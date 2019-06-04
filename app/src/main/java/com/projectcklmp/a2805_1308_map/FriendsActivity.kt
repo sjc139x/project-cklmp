@@ -25,7 +25,6 @@ class FriendsActivity : AppCompatActivity() {
         getFriends()
     }
 
-
     private fun getFriends() {
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
         val dbRef = FirebaseDatabase.getInstance().reference
