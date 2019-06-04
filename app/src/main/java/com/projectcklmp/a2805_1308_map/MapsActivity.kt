@@ -27,6 +27,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBar
+import android.view.MenuItem
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -49,6 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var redButton: ImageButton
     private lateinit var placeMarkerGem: ImageButton
     private lateinit var storeSnapshot: DataSnapshot
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onMarkerClick(marker: Marker): Boolean {
 
@@ -82,9 +88,6 @@ if (distanceInMeters <= 75) {
 return true
     }
 
-
-
-
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
@@ -94,11 +97,76 @@ return true
         super.onCreate(savedInstanceState)
         getCurrentUser()
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        auth = FirebaseAuth.getInstance()
+
+        setUpMenuDrawer()
+    }
+
+    private fun setUpMenuDrawer() {
+        val actionbar: ActionBar? = supportActionBar
+        actionbar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(null)
+        }
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawerLayout.closeDrawers()
+
+            // navigation item clicks
+            when (menuItem.itemId) {
+
+                R.id.nav_social_friend_list -> {
+                    finish()
+                    startActivity(Intent(this, FriendsActivity::class.java))
+                }
+
+                R.id.nav_account_log_out -> {
+                    auth.signOut()
+                    finish()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                }
+
+                R.id.nav_account_reset_password -> {
+                    sendPasswordResetEmail()
+                }
+
+            }
+
+            true
+
+        }
+        // Add code here to update the UI based on the item selected
+
+    }
+
+    private fun sendPasswordResetEmail() {
+        val userEmail = auth.currentUser!!.email
+        auth.sendPasswordResetEmail(userEmail!!)
+            .addOnCompleteListener{ task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Email sent.", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when (item.itemId) {
+            android.R.id.home -> {
+                drawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -230,11 +298,11 @@ return true
 
                             // Pin style
 
-
                             // Add object to firebase
                             database = FirebaseDatabase.getInstance()
                             databaseReference = database!!.reference!!.child("markers").push()
                             auth = FirebaseAuth.getInstance()
+
 
                             if (currentUser.email != null && currentLatLng != null && downloadUri != null) {
                                 databaseReference.child("user").setValue(currentUser.email)
@@ -269,7 +337,6 @@ return true
         }
     }
 
-
     private fun getCurrentUser() {
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
@@ -277,7 +344,6 @@ return true
         } else {
             Toast.makeText(this, "No user is signed in", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     // Show map view without landmarks

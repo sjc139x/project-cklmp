@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+ <menu xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+
+    <group android:checkableBehavior="single" android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <item android:title="SOCIAL">
+                <menu>
+                    <group android:checkableBehavior="single">
+                        <item
+                                android:id="@+id/nav_social_friend_list"
+                                android:icon="@drawable/gem_red"
+                                android:title="view friend list" />
+                        <item
+                                android:id="@+id/nav_social_add_friend"
+                                android:icon="@drawable/gem_red"
+                                android:title="add a friend" />
+                    </group>
+                </menu>
+            </item>
+        </group>
+
+        <group android:checkableBehavior="single" android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <item android:title="TOURS">
+                <menu>
+                    <group android:checkableBehavior="single">
+                        <item
+                                android:id="@+id/nav_tours_view_tours"
+                                android:icon="@drawable/gem_red"
+                                android:title="view local tours" />
+                        <item
+                                android:id="@+id/nav_social_create_tour"
+                                android:icon="@drawable/gem_red"
+                                android:title="create a tour" />
+                    </group>
+                </menu>
+            </item>
+        </group>
+
+        <group android:checkableBehavior="single" android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <item android:title="MAP FILTERS">
+                <menu>
+                    <group android:checkableBehavior="single">
+                        <item
+                                android:id="@+id/nav_map_filters_detailed"
+                                android:icon="@drawable/gem_red"
+                                android:title="detail view" />
+                        <item
+                                android:id="@+id/nav_map_filters_night"
+                                android:icon="@drawable/gem_red"
+                                android:title="night view" />
+                    </group>
+                </menu>
+            </item>
+        </group>
+
+        <group android:checkableBehavior="single" android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <item android:title="ACCOUNT">
+                <menu>
+                    <group android:checkableBehavior="single">
+                        <item
+                                android:id="@+id/nav_account_log_out"
+                                android:icon="@drawable/gem_red"
+                                android:title="log out" />
+                        <item
+                                android:id="@+id/nav_account_reset_password"
+                                android:icon="@drawable/gem_red"
+                                android:title="reset password" />
+                    </group>
+                </menu>
+            </item>
+        </group>
+
+</menu>
