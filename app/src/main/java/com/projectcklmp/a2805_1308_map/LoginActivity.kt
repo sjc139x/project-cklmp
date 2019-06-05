@@ -7,6 +7,8 @@ import android.media.Image
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Contacts
+import android.support.v4.content.ContextCompat.startActivity
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -74,10 +76,10 @@ class LoginActivity : AppCompatActivity() {
         val prefPass = getSharedPreferences(prefPass, Context.MODE_PRIVATE)
         val username: String = pref.getString(prefUserName, "")
         val password: String = prefPass.getString(prefPassword, "")
+        Log.d("hello", username + password)
         if (username != "" || password != "") {
             loginUser(username, password, true)
-        }
-        else {
+        } else {
             dialog.hide()
         }
     }
@@ -96,12 +98,17 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         updateUI(MapsActivity::class.java)
                         dialog.hide()
+
                     } else {
-                        Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
+                        dialog.hide()
+                        if (rememberedEmail == "" && rememberedPassword == "") {
+                            Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
         }
     }
+
 
     private fun updateUI(activity: Class<*>) {
         val intent = Intent(this, activity)
@@ -118,8 +125,6 @@ class LoginActivity : AppCompatActivity() {
                 R.id.checkbox_remember_me -> {
                     if (checked) {
                         rememberMe(enteredEmail!!, enteredPassword!!)
-                    } else {
-                        // Remove the meat
                     }
                 }
             }
@@ -128,7 +133,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun rememberMe(user: String, password: String) {
         //save username and password in SharedPreferences
-        Log.d("hello2", user + password)
 
         getSharedPreferences(prefName, Context.MODE_PRIVATE)
             .edit()
