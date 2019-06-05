@@ -15,6 +15,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var lookupReference: DatabaseReference
 
     private lateinit var usernameInput: EditText
     private lateinit var emailInput: EditText
@@ -43,6 +44,7 @@ class RegisterActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance()
         databaseReference = database!!.reference!!.child("users")
+        lookupReference = database!!.reference!!.child("lookup")
         auth = FirebaseAuth.getInstance()
 
         registerButton.setOnClickListener { view ->
@@ -73,6 +75,8 @@ class RegisterActivity : AppCompatActivity() {
                     val currentUserDb = databaseReference!!.child(userId)
                     currentUserDb.child("username").setValue(username)
                     currentUserDb.child("email").setValue(email)
+
+                    lookupReference!!.child(username).setValue(userId)
 
                     updateUserInfoAndUI()
                 } else {
