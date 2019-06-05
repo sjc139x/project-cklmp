@@ -2,7 +2,7 @@
 
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                         xmlns:app="http://schemas.android.com/apk/res-auto"
-                                        android:id="@+id/drawer_layout"
+                                        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/drawer_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fitsSystemWindows="true">
@@ -12,11 +12,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
-                        android:layout_width="match_parent"
+        <RelativeLayout
+                android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        xmlns:app="http://schemas.android.com/apk/res-auto">
+        >
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                       xmlns:tools="http://schemas.android.com/tools"
@@ -33,35 +32,33 @@
             <ImageButton
                     android:src="@drawable/button_red_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/red_button" android:background="#00FFFFFF"
-                    android:layout_marginBottom="167dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
-                    android:layout_alignEnd="@+id/map"/>
+                    android:layout_height="wrap_content" android:id="@+id/button_left" android:background="#00FFFFFF"
+                    android:layout_marginBottom="47dp" android:layout_alignBottom="@+id/map"
+                    android:layout_alignRight="@+id/map" android:layout_marginRight="267dp"
+                    android:layout_marginEnd="267dp"
+                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="104dp"
+                    android:layout_marginStart="104dp" android:layout_alignLeft="@+id/map"
+                    android:layout_alignStart="@+id/map"/>
             <ImageButton
                     android:src="@drawable/button_purple_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/purple_button"
-                    android:layout_marginBottom="231dp"
+                    android:layout_height="wrap_content" android:id="@+id/button_right"
+                    android:layout_marginBottom="46dp"
                     android:layout_alignBottom="@+id/map" android:layout_alignRight="@+id/map"
-                    android:layout_marginRight="7dp" android:layout_marginEnd="7dp" android:layout_alignEnd="@+id/map"
-                    android:background="#00FFFFFF"/>
-            <ImageButton
-                    android:src="@drawable/button_blue_small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/blue_button" android:background="#00FFFFFF"
-                    android:layout_marginBottom="294dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
-                    android:layout_alignEnd="@+id/map"/>
+                    android:layout_marginRight="107dp" android:layout_marginEnd="107dp"
+                    android:layout_alignEnd="@+id/map"
+                    android:background="#00FFFFFF" android:layout_marginLeft="264dp" android:layout_marginStart="264dp"
+                    android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
             <ImageButton
                     android:src="@drawable/button_blue_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/place_marker_gem"
                     android:background="#00FFFFFF"
-                    android:layout_marginBottom="28dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="155dp"
-                    android:layout_marginEnd="155dp"
-                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="155dp"
-                    android:layout_marginStart="155dp"
+                    android:layout_marginBottom="27dp" android:layout_alignBottom="@+id/map"
+                    android:layout_alignRight="@+id/map" android:layout_marginRight="157dp"
+                    android:layout_marginEnd="157dp"
+                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="153dp"
+                    android:layout_marginStart="153dp"
                     android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
 
         </RelativeLayout>

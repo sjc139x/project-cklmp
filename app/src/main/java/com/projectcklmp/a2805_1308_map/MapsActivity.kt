@@ -33,6 +33,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.animation.AnimationUtils
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMarkerClickListener {
@@ -50,9 +51,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var gemColor: String = "blue"
-    private lateinit var blueButton: ImageButton
-    private lateinit var purpleButton: ImageButton
-    private lateinit var redButton: ImageButton
+    private var gemLeft: String = "red"
+    private var gemRight: String = "purple"
+    private lateinit var gemLeftButton: ImageButton
+    private lateinit var gemRightButton: ImageButton
     private lateinit var placeMarkerGem: ImageButton
     private lateinit var storeSnapshot: DataSnapshot
     private lateinit var drawerLayout: DrawerLayout
@@ -175,9 +177,8 @@ return true
         map.getUiSettings().setZoomControlsEnabled(true)
         map.setOnMarkerClickListener(this)
         changeView = findViewById(R.id.change_detail)
-        blueButton = findViewById(R.id.blue_button)
-        purpleButton = findViewById(R.id.purple_button)
-        redButton = findViewById(R.id.red_button)
+        gemLeftButton = findViewById(R.id.button_left)
+        gemRightButton = findViewById(R.id.button_right)
         placeMarkerGem = findViewById(R.id.place_marker_gem)
 
         // Places a marker on the map on the click of a button, centres camera, no zooming
@@ -187,6 +188,8 @@ return true
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             placeMarkerGem.setOnClickListener {
+                val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+                placeMarkerGem.startAnimation(bounceAnimation)
                 fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
                     if (location != null) {
                         lastLocation = location
@@ -220,14 +223,31 @@ return true
             Log.e("MapsActivity", "Can't find style. Error: ", e)
         }
 
-        blueButton.setOnClickListener {
-            changeGemColour("blue", "Public",googleMap)
+        gemLeftButton.setOnClickListener {
+            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            gemLeftButton.startAnimation(bounceAnimation)
+            var colour: String = gemLeft
+            gemLeft = gemColor
+            when (gemLeft) {
+                "blue" -> gemLeftButton.setImageResource(R.drawable.button_blue_small)
+                "purple" -> gemLeftButton.setImageResource(R.drawable.button_purple_small)
+                "red" -> gemLeftButton.setImageResource(R.drawable.button_red_small)
+                else -> gemLeftButton.setImageResource(R.drawable.button_blue_small)
+            }
+            changeGemColour(colour,googleMap)
         }
-        purpleButton.setOnClickListener {
-            changeGemColour("purple","Friends",googleMap)
-        }
-        redButton.setOnClickListener {
-            changeGemColour("red","Private",googleMap)
+        gemRightButton.setOnClickListener {
+            val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
+            gemRightButton.startAnimation(bounceAnimation)
+            var colour: String = gemRight
+            gemRight = gemColor
+            when (gemRight) {
+                "blue" -> gemRightButton.setImageResource(R.drawable.button_blue_small)
+                "purple" -> gemRightButton.setImageResource(R.drawable.button_purple_small)
+                "red" -> gemRightButton.setImageResource(R.drawable.button_red_small)
+                else -> gemRightButton.setImageResource(R.drawable.button_blue_small)
+            }
+            changeGemColour(colour,googleMap)
         }
 
         setUpMap()
@@ -423,18 +443,33 @@ return true
          }
      }
 
-    fun changeGemColour(colour: String, view: String, googleMap: GoogleMap) {
+    fun changeGemColour(colour: String, googleMap: GoogleMap) {
         gemColor = colour
         placeMarkerGem = findViewById(R.id.place_marker_gem)
+        val view: String
+        when (gemColor) {
+            "blue" -> {
+                placeMarkerGem.setImageResource(R.drawable.button_blue_big)
+                view = "Public"
+            }
+            "purple" -> {
+                placeMarkerGem.setImageResource(R.drawable.button_purple_big)
+                view = "Friends"
+            }
+            "red" -> {
+                placeMarkerGem.setImageResource(R.drawable.button_red_big)
+                view = "Private"
+            }
+            else -> {
+                placeMarkerGem.setImageResource(R.drawable.button_blue_big)
+                view = "Public"
+            }
+        }
         val toast = Toast.makeText(this,view,Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.TOP,0,100)
         toast.show()
-        when (colour) {
-            "blue" -> placeMarkerGem.setImageResource(R.drawable.button_blue_big)
-            "purple" -> placeMarkerGem.setImageResource(R.drawable.button_purple_big)
-            "red" -> placeMarkerGem.setImageResource(R.drawable.button_red_big)
-            else -> placeMarkerGem.setImageResource(R.drawable.button_blue_big)
-        }
         loadMarkers(storeSnapshot, googleMap)
     }
+
+
 }
