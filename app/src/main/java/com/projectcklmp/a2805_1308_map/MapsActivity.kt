@@ -95,7 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     else if(distanceInMeters >= 1000) {
                         Toast.makeText(this, "U R ${Math.round(distanceInMeters/100)/10}km from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show()
                     }
-                    else{ Toast.makeText(this, "U R ${distanceInMeters}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show() }
+                    else{ Toast.makeText(this, "U R ${Math.round(distanceInMeters * 10) / 10}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show() }
                 }}
 
         }
