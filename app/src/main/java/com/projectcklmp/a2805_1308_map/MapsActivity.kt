@@ -149,7 +149,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             when (menuItem.itemId) {
 
                 R.id.nav_social_friend_list -> {
-                    finish()
                     startActivity(Intent(this, FriendsActivity::class.java))
                 }
 
