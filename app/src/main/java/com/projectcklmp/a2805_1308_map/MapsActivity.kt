@@ -56,41 +56,61 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var placeMarkerGem: ImageButton
     private lateinit var storeSnapshot: DataSnapshot
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var currentLatLng: LatLng
 
     override fun onMarkerClick(marker: Marker): Boolean {
 
-        val mark = marker.position
-
-        val userloc1 = Location("")
-        userloc1.latitude = lastLocation.latitude
-        userloc1.longitude = lastLocation.longitude
-
-        val markerloc2 = Location("")
-        markerloc2.latitude = mark.latitude
-        markerloc2.longitude = mark.longitude
-
-        val distanceInMeters = userloc1.distanceTo(markerloc2)
-
-
-        val url = "${marker.title}".split(" ")
-
-        Log.d("sausage", "${distanceInMeters}")
-        if (distanceInMeters <= 75) {
-
-            val playIntent = Intent(this, VideoPlayer::class.java)
-            playIntent.putExtra("videoUri", url[1]);
-            startActivity(playIntent)
-        } else if (distanceInMeters >= 1000) {
-            Toast.makeText(
+        if (ActivityCompat.checkSelfPermission(
                 this,
-                "U R ${Math.round(distanceInMeters / 100) / 10}km from this gem, pls get closer!!!",
-                Toast.LENGTH_SHORT
-            ).show()
-        } else {
-            Toast.makeText(this, "U R ${distanceInMeters}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show()
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+                if (location != null) {
+                    lastLocation = location
+                    currentLatLng = LatLng(location.latitude, location.longitude)
+
+                    val mark = marker.position
+
+                    val userloc1 = Location("")
+                    userloc1.latitude = lastLocation.latitude
+                    userloc1.longitude = lastLocation.longitude
+
+                    val markerloc2 = Location("")
+                    markerloc2.latitude = mark.latitude
+                    markerloc2.longitude = mark.longitude
+
+                    val distanceInMeters = userloc1.distanceTo(markerloc2)
+
+
+                    val url = "${marker.title}".split(" ")
+
+                    Log.d("sausage", "${distanceInMeters}")
+                    if (distanceInMeters <= 75) {
+
+                        val playIntent = Intent(this, VideoPlayer::class.java)
+                        playIntent.putExtra("videoUri", url[1]);
+                        startActivity(playIntent)
+                    } else if (distanceInMeters >= 1000) {
+                        Toast.makeText(
+                            this,
+                            "U R ${Math.round(distanceInMeters / 100) / 10}km from this gem, pls get closer!!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "U R ${Math.round(distanceInMeters * 10) / 10}m from this gem, pls get closer!!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+
         }
         return true
     }
+
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
