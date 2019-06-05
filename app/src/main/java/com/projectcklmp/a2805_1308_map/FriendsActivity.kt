@@ -21,7 +21,8 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var dbRef: FirebaseDatabase
     private lateinit var userFriendsRef: DatabaseReference
     private lateinit var friendsRef: DatabaseReference
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerViewFRIEND: RecyclerView
+    private lateinit var recyclerViewPENDING: RecyclerView
     private lateinit var auth: FirebaseAuth
     private lateinit var lookupRef: DatabaseReference
 
@@ -43,7 +44,8 @@ class FriendsActivity : AppCompatActivity() {
             userFriendsRef = dbRef.reference.child("users").child(userId).child("friends")
             friendsRef = dbRef.reference.child("users")
             lookupRef = dbRef.reference.child("lookup")
-            recyclerView = findViewById(R.id.friends_list)
+            recyclerViewFRIEND = findViewById(R.id.friends_list)
+            recyclerViewPENDING = findViewById(R.id.friend_requests_list)
             addFriendInput = findViewById(R.id.add_friend_input_field)
             addFriendButton = findViewById(R.id.add_friend_button)
 
@@ -101,8 +103,11 @@ class FriendsActivity : AppCompatActivity() {
                         if (it.value != "accepted") REQUEST_LIST.add(it.key.toString())
                     }
 
-                recyclerView.layoutManager = LinearLayoutManager(this@FriendsActivity)
-                recyclerView.adapter = FriendsAdapter()
+                recyclerViewFRIEND.layoutManager = LinearLayoutManager(this@FriendsActivity)
+                recyclerViewFRIEND.adapter = FriendsAdapter()
+
+                recyclerViewPENDING.layoutManager = LinearLayoutManager(this@FriendsActivity)
+                recyclerViewPENDING.adapter = RequestsAdapter()
 
             }
 
