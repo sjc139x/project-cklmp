@@ -76,8 +76,7 @@ class LoginActivity : AppCompatActivity() {
         val password: String = prefPass.getString(prefPassword, "")
         if (username != "" || password != "") {
             loginUser(username, password, true)
-        }
-        else {
+        } else {
             dialog.hide()
         }
     }
@@ -97,11 +96,15 @@ class LoginActivity : AppCompatActivity() {
                         updateUI(MapsActivity::class.java)
                         dialog.hide()
                     } else {
-                        Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
+                        dialog.hide()
+                        if (rememberedEmail == "" && rememberedPassword == "") {
+                            Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
         }
     }
+
 
     private fun updateUI(activity: Class<*>) {
         val intent = Intent(this, activity)
@@ -118,8 +121,6 @@ class LoginActivity : AppCompatActivity() {
                 R.id.checkbox_remember_me -> {
                     if (checked) {
                         rememberMe(enteredEmail!!, enteredPassword!!)
-                    } else {
-                        // Remove the meat
                     }
                 }
             }
