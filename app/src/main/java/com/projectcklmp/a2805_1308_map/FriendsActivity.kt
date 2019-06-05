@@ -5,32 +5,56 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class FriendsActivity : AppCompatActivity() {
 
+    private lateinit var addFriendInput: EditText
+    private lateinit var addFriendSubmit: String
+    private lateinit var addFriendButton: Button
+    private lateinit var userId: String
+    private lateinit var dbRef: FirebaseDatabase
+    private lateinit var userRef: DatabaseReference
+    private lateinit var friendsRef: DatabaseReference
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var auth: FirebaseAuth
 
     companion object {
         var FRIENDS_LIST: MutableList<String> = mutableListOf()
         var REQUEST_LIST: MutableList<String> = mutableListOf()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends)
 
-        getFriends()
+            dbRef = FirebaseDatabase.getInstance()
+            auth = FirebaseAuth.getInstance()
+            userId = auth.currentUser!!.uid
+            userRef = dbRef.reference.child("users").child(userId)
+            friendsRef = userRef.child("friends")
+            recyclerView = findViewById(R.id.friends_list)
+            addFriendInput = findViewById(R.id.add_friend_input_field)
+            addFriendSubmit = addFriendInput.text.toString()
+            addFriendButton = findViewById(R.id.add_friend_button)
+
+            addFriendButton.setOnClickListener{
+                addFriend()
+            }
+
+            getFriends()
+
+    }
+
+
+    private fun addFriend() {
+        friendsRef.child("$addFriendInput").setValue("pending")
     }
 
     private fun getFriends() {
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        val dbRef = FirebaseDatabase.getInstance().reference
-        val userRef = dbRef.child("users").child(userId)
-        val friendsRef = userRef.child("friends")
-        val recyclerView: RecyclerView = findViewById(R.id.friends_list)
-
         val valueEventListener = object : ValueEventListener {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -56,6 +80,8 @@ class FriendsActivity : AppCompatActivity() {
         friendsRef.addListenerForSingleValueEvent(valueEventListener)
 
     }
+
+
 
 }
 

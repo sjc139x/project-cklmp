@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val userId = auth!!.currentUser!!.uid
-                    //Verify Email
+//                    Verify Email
 //                    verifyEmail();
                     //update user profile information
                     val currentUserDb = databaseReference!!.child(userId)
