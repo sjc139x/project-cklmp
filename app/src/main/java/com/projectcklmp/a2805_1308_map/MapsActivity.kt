@@ -1,6 +1,7 @@
 package com.projectcklmp.a2805_1308_map
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -58,7 +59,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMarkerClick(marker: Marker): Boolean {
 
-val mark = marker.position
+        val mark = marker.position
 
         val userloc1 = Location("")
         userloc1.latitude = lastLocation.latitude
@@ -71,21 +72,24 @@ val mark = marker.position
         val distanceInMeters = userloc1.distanceTo(markerloc2)
 
 
-
         val url = "${marker.title}".split(" ")
 
-        Log.d("sausage","${distanceInMeters}")
-if (distanceInMeters <= 75) {
+        Log.d("sausage", "${distanceInMeters}")
+        if (distanceInMeters <= 75) {
 
-    val playIntent = Intent(this, VideoPlayer::class.java)
-    playIntent.putExtra("videoUri", url[1]);
-    startActivity(playIntent)
-}
-        else if(distanceInMeters >= 1000) {
-    Toast.makeText(this, "U R ${Math.round(distanceInMeters/100)/10}km from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show()
-}
-    else{ Toast.makeText(this, "U R ${distanceInMeters}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show() }
-return true
+            val playIntent = Intent(this, VideoPlayer::class.java)
+            playIntent.putExtra("videoUri", url[1]);
+            startActivity(playIntent)
+        } else if (distanceInMeters >= 1000) {
+            Toast.makeText(
+                this,
+                "U R ${Math.round(distanceInMeters / 100) / 10}km from this gem, pls get closer!!!",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(this, "U R ${distanceInMeters}m from this gem, pls get closer!!!", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 
     companion object {
@@ -132,6 +136,14 @@ return true
                 R.id.nav_account_log_out -> {
                     auth.signOut()
                     finish()
+                    getSharedPreferences("userPref", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("", "")
+                        .commit()
+                    getSharedPreferences("userPass", Context.MODE_PRIVATE)
+                        .edit()
+                        .putString("", "")
+                        .commit()
                     startActivity(Intent(this, LoginActivity::class.java))
                 }
 
@@ -151,7 +163,7 @@ return true
     private fun sendPasswordResetEmail() {
         val userEmail = auth.currentUser!!.email
         auth.sendPasswordResetEmail(userEmail!!)
-            .addOnCompleteListener{ task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Email sent.", Toast.LENGTH_SHORT).show()
                 }
@@ -220,13 +232,13 @@ return true
         }
 
         blueButton.setOnClickListener {
-            changeGemColour("blue",googleMap)
+            changeGemColour("blue", googleMap)
         }
         purpleButton.setOnClickListener {
-            changeGemColour("purple",googleMap)
+            changeGemColour("purple", googleMap)
         }
         redButton.setOnClickListener {
-            changeGemColour("red",googleMap)
+            changeGemColour("red", googleMap)
         }
 
         setUpMap()
@@ -310,7 +322,8 @@ return true
                                 databaseReference.child("color").setValue(gemColor)
                                 databaseReference.child("url").setValue(downloadUri)
 
-                                val markerOptions = MarkerOptions().position(currentLatLng).title("${currentUser.email} $downloadUri" )
+                                val markerOptions =
+                                    MarkerOptions().position(currentLatLng).title("${currentUser.email} $downloadUri")
                                 markerOptions.icon(
                                     BitmapDescriptorFactory.fromBitmap(
                                         when (gemColor) {
@@ -387,40 +400,41 @@ return true
                 storeSnapshot = snapshot
                 loadMarkers(snapshot, googleMap)
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("TAG", "listener:onCancelled", databaseError.toException())
             }
         })
     }
 
-     fun loadMarkers(snapshot: DataSnapshot, googleMap: GoogleMap) {
-         map = googleMap
-         map.clear()
-         val markers = snapshot.children
-         markers.forEach {
-             val userForMarker = it.child("user").value
-             val latForMarker = it.child("latLng").child("latitude").value
-             val lngForMarker = it.child("latLng").child("longitude").value
-             val urlForMarker = it.child("url").value
-             val colorForMarker = it.child("color").value
+    fun loadMarkers(snapshot: DataSnapshot, googleMap: GoogleMap) {
+        map = googleMap
+        map.clear()
+        val markers = snapshot.children
+        markers.forEach {
+            val userForMarker = it.child("user").value
+            val latForMarker = it.child("latLng").child("latitude").value
+            val lngForMarker = it.child("latLng").child("longitude").value
+            val urlForMarker = it.child("url").value
+            val colorForMarker = it.child("color").value
 
-             if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null && colorForMarker == gemColor) {
-                 val places = LatLng(latForMarker as Double, lngForMarker as Double)
-                 val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker"  as String? )
-                 markerOptions.icon(
-                     BitmapDescriptorFactory.fromBitmap(
-                         when (colorForMarker) {
-                             "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
-                             "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
-                             "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
-                             else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
-                         }
-                     )
-                 )
-                 map.addMarker(markerOptions)
-             }
-         }
-     }
+            if (userForMarker != null && latForMarker != null && lngForMarker != null && urlForMarker != null && colorForMarker == gemColor) {
+                val places = LatLng(latForMarker as Double, lngForMarker as Double)
+                val markerOptions = MarkerOptions().position(places).title("$userForMarker $urlForMarker" as String?)
+                markerOptions.icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        when (colorForMarker) {
+                            "blue" -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                            "purple" -> BitmapFactory.decodeResource(resources, R.drawable.gem_purple)
+                            "red" -> BitmapFactory.decodeResource(resources, R.drawable.gem_red)
+                            else -> BitmapFactory.decodeResource(resources, R.drawable.gem_blue)
+                        }
+                    )
+                )
+                map.addMarker(markerOptions)
+            }
+        }
+    }
 
     fun changeGemColour(colour: String, googleMap: GoogleMap) {
         gemColor = colour
