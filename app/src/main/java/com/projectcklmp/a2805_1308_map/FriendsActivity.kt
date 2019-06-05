@@ -13,7 +13,7 @@ import com.google.firebase.database.*
 class FriendsActivity : AppCompatActivity() {
 
     private lateinit var addFriendInput: EditText
-    private lateinit var addFriendSubmit: String
+    private lateinit var addFriendText: String
     private lateinit var addFriendButton: Button
     private lateinit var userId: String
     private lateinit var dbRef: FirebaseDatabase
@@ -34,14 +34,13 @@ class FriendsActivity : AppCompatActivity() {
             dbRef = FirebaseDatabase.getInstance()
             auth = FirebaseAuth.getInstance()
             userId = auth.currentUser!!.uid
-            userRef = dbRef.reference.child("users").child(userId)
-            friendsRef = userRef.child("friends")
+            friendsRef = dbRef.reference.child("users").child(userId).child("friends")
             recyclerView = findViewById(R.id.friends_list)
             addFriendInput = findViewById(R.id.add_friend_input_field)
-            addFriendSubmit = addFriendInput.text.toString()
             addFriendButton = findViewById(R.id.add_friend_button)
 
             addFriendButton.setOnClickListener{
+                addFriendText = addFriendInput.text.toString()
                 addFriend()
             }
 
@@ -51,7 +50,9 @@ class FriendsActivity : AppCompatActivity() {
 
 
     private fun addFriend() {
-        friendsRef.child("$addFriendInput").setValue("pending")
+        if (addFriendText != null) {
+            friendsRef.child(addFriendText).setValue("pending")
+        }
     }
 
     private fun getFriends() {
