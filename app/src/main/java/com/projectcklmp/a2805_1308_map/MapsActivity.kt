@@ -31,6 +31,7 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
+import android.view.Gravity
 import android.view.MenuItem
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -425,6 +426,9 @@ return true
     fun changeGemColour(colour: String, view: String, googleMap: GoogleMap) {
         gemColor = colour
         placeMarkerGem = findViewById(R.id.place_marker_gem)
+        val toast = Toast.makeText(this,view,Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.TOP,0,100)
+        toast.show()
         when (colour) {
             "blue" -> placeMarkerGem.setImageResource(R.drawable.button_blue_big)
             "purple" -> placeMarkerGem.setImageResource(R.drawable.button_purple_big)
