@@ -220,13 +220,13 @@ return true
         }
 
         blueButton.setOnClickListener {
-            changeGemColour("blue",googleMap)
+            changeGemColour("blue", "Public",googleMap)
         }
         purpleButton.setOnClickListener {
-            changeGemColour("purple",googleMap)
+            changeGemColour("purple","Friends",googleMap)
         }
         redButton.setOnClickListener {
-            changeGemColour("red",googleMap)
+            changeGemColour("red","Private",googleMap)
         }
 
         setUpMap()
@@ -422,14 +422,14 @@ return true
          }
      }
 
-    fun changeGemColour(colour: String, googleMap: GoogleMap) {
+    fun changeGemColour(colour: String, view: String, googleMap: GoogleMap) {
         gemColor = colour
         placeMarkerGem = findViewById(R.id.place_marker_gem)
         when (colour) {
-            "blue" -> placeMarkerGem.setImageResource(R.drawable.gem_blue)
-            "purple" -> placeMarkerGem.setImageResource(R.drawable.gem_purple)
-            "red" -> placeMarkerGem.setImageResource(R.drawable.gem_red)
-            else -> placeMarkerGem.setImageResource(R.drawable.gem_blue)
+            "blue" -> placeMarkerGem.setImageResource(R.drawable.button_blue_big)
+            "purple" -> placeMarkerGem.setImageResource(R.drawable.button_purple_big)
+            "red" -> placeMarkerGem.setImageResource(R.drawable.button_red_big)
+            else -> placeMarkerGem.setImageResource(R.drawable.button_blue_big)
         }
         loadMarkers(storeSnapshot, googleMap)
     }

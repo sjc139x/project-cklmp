@@ -31,33 +31,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/change_detail"/>
             <ImageButton
-                    android:src="@drawable/gem_red"
+                    android:src="@drawable/button_red_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/red_button" android:background="#00FFFFFF"
                     android:layout_marginBottom="167dp" android:layout_alignBottom="@+id/map"
                     android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
                     android:layout_alignEnd="@+id/map"/>
             <ImageButton
-                    android:src="@drawable/gem_purple"
+                    android:src="@drawable/button_purple_small"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/purple_button" android:layout_marginBottom="231dp"
+                    android:layout_height="wrap_content" android:id="@+id/purple_button"
+                    android:layout_marginBottom="231dp"
                     android:layout_alignBottom="@+id/map" android:layout_alignRight="@+id/map"
                     android:layout_marginRight="7dp" android:layout_marginEnd="7dp" android:layout_alignEnd="@+id/map"
                     android:background="#00FFFFFF"/>
             <ImageButton
-                    android:src="@drawable/gem_blue"
+                    android:src="@drawable/button_blue_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/blue_button" android:background="#00FFFFFF"
                     android:layout_marginBottom="294dp" android:layout_alignBottom="@+id/map"
                     android:layout_alignRight="@+id/map" android:layout_marginRight="7dp" android:layout_marginEnd="7dp"
                     android:layout_alignEnd="@+id/map"/>
             <ImageButton
-                    android:src="@drawable/gem_blue"
+                    android:src="@drawable/button_blue_big"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" android:id="@+id/place_marker_gem" android:background="#00FFFFFF"
-                    android:layout_marginBottom="27dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="158dp" android:layout_marginEnd="158dp"
-                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="152dp" android:layout_marginStart="152dp"
+                    android:layout_height="wrap_content" android:id="@+id/place_marker_gem"
+                    android:background="#00FFFFFF"
+                    android:layout_marginBottom="28dp" android:layout_alignBottom="@+id/map"
+                    android:layout_alignRight="@+id/map" android:layout_marginRight="155dp"
+                    android:layout_marginEnd="155dp"
+                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="155dp"
+                    android:layout_marginStart="155dp"
                     android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
 
         </RelativeLayout>
