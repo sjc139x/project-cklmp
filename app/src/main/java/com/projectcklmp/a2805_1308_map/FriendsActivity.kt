@@ -7,14 +7,13 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_friends.*
-import kotlinx.android.synthetic.main.friend_card.*
 
 class FriendsActivity : AppCompatActivity() {
 
 
     companion object {
         var FRIENDS_LIST: MutableList<String> = mutableListOf()
+        var REQUEST_LIST: MutableList<String> = mutableListOf()
     }
 
 
@@ -38,11 +37,10 @@ class FriendsActivity : AppCompatActivity() {
 
                 val friendsSnapshot = dataSnapshot.children
 
-                if (FRIENDS_LIST.isEmpty()) {
                     friendsSnapshot.forEach {
-                        FRIENDS_LIST.add(it.key.toString())
+                        if (it.value == "accepted") FRIENDS_LIST.add(it.key.toString())
+                        if (it.value === "pending") REQUEST_LIST.add(it.key.toString())
                     }
-                }
 
                 recyclerView.layoutManager = LinearLayoutManager(this@FriendsActivity)
                 recyclerView.adapter = FriendsAdapter()

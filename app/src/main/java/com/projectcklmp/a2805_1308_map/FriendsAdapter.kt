@@ -1,13 +1,12 @@
 package com.projectcklmp.a2805_1308_map
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.friend_card.view.*
+import kotlinx.android.synthetic.main.friend_cell.view.*
 
 
 class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.CustomViewHolder>() {
@@ -20,7 +19,7 @@ class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val cellForRow = layoutInflater.inflate(R.layout.friend_card, parent,false)
+        val cellForRow = layoutInflater.inflate(R.layout.friend_cell, parent,false)
         return CustomViewHolder(cellForRow)
     }
 
@@ -38,11 +37,13 @@ class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.CustomViewHolder>() {
         val dbRef = FirebaseDatabase.getInstance().reference
         val friendsRef = dbRef.child("users").child(userId).child("friends")
 
-        friendsRef.child(notFriend).removeValue()
+        friendsRef.child(notFriend).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                friendsArray.remove(notFriend)
+                this.notifyDataSetChanged()
+            }
+        }
 
-        Log.d("FriendsAdapter", "friendsArray ---> $friendsArray")
-
-        Log.d("FriendsAdapter", "friend to delete ----> $notFriend")
     }
 
     class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view)

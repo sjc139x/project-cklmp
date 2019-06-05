@@ -12,7 +12,9 @@
     <string name="register_link_text">create account</string>
     <string name="log_in_remember_me">remember me</string>
     <string name="friends_search_title">find friends</string>
-    <string name="friends_list_title">my friends</string>
-    <string name="friend_requests_title">my requests</string>
+    <string name="friends_list_title">friends</string>
     <string name="friend_remove_button">delete</string>
+    <string name="decline_button">✖</string>
+    <string name="accept_button">✓</string>
+    <string name="add_friend_button_text">request</string>
 </resources>
