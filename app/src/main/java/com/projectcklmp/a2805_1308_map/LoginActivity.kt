@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseAuth
 import android.support.v4.os.HandlerCompat.postDelayed
 import android.view.Window
 import android.view.Window.FEATURE_NO_TITLE
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 class LoginActivity : AppCompatActivity() {
@@ -76,13 +78,15 @@ class LoginActivity : AppCompatActivity() {
         val prefPass = getSharedPreferences(prefPass, Context.MODE_PRIVATE)
         val username: String = pref.getString(prefUserName, "")
         val password: String = prefPass.getString(prefPassword, "")
-        Log.d("hello", username + password)
         if (username != "" || password != "") {
             loginUser(username, password, true)
         } else {
-            dialog.hide()
+            Handler().postDelayed({
+                dialog.hide()
+            }, 1500)
         }
     }
+
 
     private fun loginUser(rememberedEmail: String, rememberedPassword: String, isRemembered: Boolean) {
         if (isRemembered) {
@@ -97,8 +101,6 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         updateUI(MapsActivity::class.java)
-                        dialog.hide()
-
                     } else {
                         dialog.hide()
                         if (rememberedEmail == "" && rememberedPassword == "") {
