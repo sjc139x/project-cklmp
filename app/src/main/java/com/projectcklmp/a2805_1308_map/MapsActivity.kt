@@ -89,7 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     if (distanceInMeters <= 75) {
 
                         val playIntent = Intent(this, VideoPlayer::class.java)
-                        playIntent.putExtra("videoUri", url[1]);
+                        playIntent.putExtra("videoUri", url[1])
                         startActivity(playIntent)
                     } else if (distanceInMeters >= 1000) {
                         Toast.makeText(
