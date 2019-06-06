@@ -31,35 +31,30 @@
                     android:layout_height="wrap_content" android:id="@+id/change_detail"/>
             <ImageButton
                     android:src="@drawable/button_red_small"
-                    android:layout_width="wrap_content"
+                    android:layout_width="41dp"
                     android:layout_height="wrap_content" android:id="@+id/button_left" android:background="#00FFFFFF"
-                    android:layout_marginBottom="47dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="267dp"
-                    android:layout_marginEnd="267dp"
-                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="104dp"
-                    android:layout_marginStart="104dp" android:layout_alignLeft="@+id/map"
-                    android:layout_alignStart="@+id/map"/>
+                    android:layout_marginBottom="46dp"
+                    android:layout_marginLeft="97dp" android:layout_marginStart="97dp"
+                    android:layout_alignLeft="@+id/map"
+                    android:layout_alignStart="@+id/map" android:layout_alignBottom="@+id/map"/>
             <ImageButton
                     android:src="@drawable/button_purple_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" android:id="@+id/button_right"
-                    android:layout_marginBottom="46dp"
-                    android:layout_alignBottom="@+id/map" android:layout_alignRight="@+id/map"
-                    android:layout_marginRight="107dp" android:layout_marginEnd="107dp"
-                    android:layout_alignEnd="@+id/map"
-                    android:background="#00FFFFFF" android:layout_marginLeft="264dp" android:layout_marginStart="264dp"
-                    android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
+                    android:background="#00FFFFFF"
+                    android:layout_marginBottom="46dp" android:layout_alignBottom="@+id/map"
+                    android:layout_alignRight="@+id/map" android:layout_marginRight="98dp"
+                    android:layout_marginEnd="98dp" android:layout_alignEnd="@+id/map"/>
             <ImageButton
                     android:src="@drawable/button_blue_big"
-                    android:layout_width="wrap_content"
+                    android:layout_width="134dp"
                     android:layout_height="wrap_content" android:id="@+id/place_marker_gem"
                     android:background="#00FFFFFF"
-                    android:layout_marginBottom="27dp" android:layout_alignBottom="@+id/map"
-                    android:layout_alignRight="@+id/map" android:layout_marginRight="157dp"
-                    android:layout_marginEnd="157dp"
-                    android:layout_alignEnd="@+id/map" android:layout_marginLeft="153dp"
-                    android:layout_marginStart="153dp"
-                    android:layout_alignLeft="@+id/map" android:layout_alignStart="@+id/map"/>
+                    android:layout_marginBottom="28dp" android:layout_alignBottom="@+id/map"
+                    android:layout_toEndOf="@+id/button_left" android:layout_toRightOf="@+id/button_left"
+                    android:layout_marginLeft="1dp" android:layout_marginStart="1dp"
+                    android:layout_toStartOf="@+id/button_right" android:layout_marginRight="1dp"
+                    android:layout_marginEnd="1dp" android:layout_toLeftOf="@+id/button_right"/>
 
         </RelativeLayout>
 

@@ -1,6 +1,5 @@
 package com.projectcklmp.a2805_1308_map
 
-import android.renderscript.Sampler
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,6 +34,7 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.CustomViewHolder>() 
         }
         holder.view.friend_request_accept_button.setOnClickListener {
             acceptRequest(requestToDisplay)
+            deleteRequest(requestToDisplay)
         }
         holder.view.request_username.text = requestToDisplay
     }
@@ -47,12 +47,23 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.CustomViewHolder>() 
         val usersRef = dbRef.child("users")
         val lookupRef = dbRef.child("lookup")
 
-        Log.d("RequestsAdapter", "requestToDisplay TOP ---> $requestToDisplay")
-
-
         val usersEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 username = dataSnapshot.child(userId).child("username").value.toString()
+
+                val valueEventListener = object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot){
+                        friendId = dataSnapshot.child(requestToDisplay).value.toString()
+                        usersRef.child(friendId).child("friends").child(username).setValue("accepted")
+                        usersRef.child(userId).child("friends").child(requestToDisplay).setValue("accepted")
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.d("FriendsActivity", databaseError.message)
+                    }
+                }
+
+                lookupRef.addListenerForSingleValueEvent(valueEventListener)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -61,25 +72,6 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.CustomViewHolder>() 
         }
 
         usersRef.addListenerForSingleValueEvent(usersEventListener)
-
-
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot){
-                friendId = dataSnapshot.child(requestToDisplay).value.toString()
-                usersRef.child(friendId).child("friends").child(username).setValue("accepted")
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("FriendsActivity", databaseError.message)
-            }
-        }
-
-        lookupRef.addListenerForSingleValueEvent(valueEventListener)
-
-
-        Log.d("RequestsAdapter", "requestToDisplay BOTTOM ---> $requestToDisplay")
-
-        usersRef.child(userId).child("friends").child(requestToDisplay).setValue("accepted")
 
     }
 

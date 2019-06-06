@@ -84,15 +84,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     markerloc2.longitude = mark.longitude
 
                     val distanceInMeters = userloc1.distanceTo(markerloc2)
-
-
                     val url = "${marker.title}".split(" ")
 
-                    Log.d("sausage", "${distanceInMeters}")
                     if (distanceInMeters <= 75) {
 
                         val playIntent = Intent(this, VideoPlayer::class.java)
-                        playIntent.putExtra("videoUri", url[1]);
+                        playIntent.putExtra("videoUri", url[1])
                         startActivity(playIntent)
                     } else if (distanceInMeters >= 1000) {
                         Toast.makeText(
@@ -129,6 +126,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        auth = FirebaseAuth.getInstance()
 
         setUpMenuDrawer()
     }
@@ -264,7 +262,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 "red" -> gemLeftButton.setImageResource(R.drawable.button_red_small)
                 else -> gemLeftButton.setImageResource(R.drawable.button_blue_small)
             }
-            changeGemColour(colour,googleMap)
+            changeGemColour(colour, googleMap)
         }
         gemRightButton.setOnClickListener {
             val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce)
@@ -277,7 +275,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 "red" -> gemRightButton.setImageResource(R.drawable.button_red_small)
                 else -> gemRightButton.setImageResource(R.drawable.button_blue_small)
             }
-            changeGemColour(colour,googleMap)
+            changeGemColour(colour, googleMap)
         }
 
         setUpMap()
@@ -497,8 +495,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 view = "Public"
             }
         }
-        val toast = Toast.makeText(this,view,Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.TOP,0,100)
+        val toast = Toast.makeText(this, view, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.TOP, 0, 100)
         toast.show()
         loadMarkers(storeSnapshot, googleMap)
     }

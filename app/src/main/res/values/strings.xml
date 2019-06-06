@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">2805_1308_map</string>
+    <string name="app_name">Mapture</string>
     <string name="title_activity_maps">Map</string>
     <string name="button_label_place_marker">Place A Marker</string>
     <string name="title_activity_camera">CameraActivity</string>

@@ -19,9 +19,9 @@ class FriendsActivity : AppCompatActivity() {
     private lateinit var userId: String
     private lateinit var friendId: String
     private lateinit var username: String
+    private lateinit var usersRef: DatabaseReference
     private lateinit var dbRef: FirebaseDatabase
-    private lateinit var userFriendsRef: DatabaseReference
-    private lateinit var friendsRef: DatabaseReference
+    private lateinit var personRequestingRef: DatabaseReference
     private lateinit var recyclerViewFRIEND: RecyclerView
     private lateinit var recyclerViewPENDING: RecyclerView
     private lateinit var auth: FirebaseAuth
@@ -42,8 +42,8 @@ class FriendsActivity : AppCompatActivity() {
             userId = auth!!.currentUser!!.uid
             friendId = ""
             username = ""
-            userFriendsRef = dbRef.reference.child("users").child(userId).child("friends")
-            friendsRef = dbRef.reference.child("users")
+            personRequestingRef = dbRef.reference.child("users").child(userId).child("friends")
+            usersRef = dbRef.reference.child("users")
             lookupRef = dbRef.reference.child("lookup")
             recyclerViewFRIEND = findViewById(R.id.friends_list)
             recyclerViewPENDING = findViewById(R.id.friend_requests_list)
@@ -63,6 +63,7 @@ class FriendsActivity : AppCompatActivity() {
 
 
     private fun addFriend(addFriendText: String) {
+        //gets requestee UID
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot){
                 friendId = dataSnapshot.child(addFriendText).value.toString()
@@ -75,9 +76,11 @@ class FriendsActivity : AppCompatActivity() {
 
         lookupRef.addListenerForSingleValueEvent(valueEventListener)
 
+        //gets requester username
         val usernameEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot){
                 username = dataSnapshot.child(userId).child("username").value.toString()
+                usersRef.child(friendId).child("friends").child(username).setValue(userId)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -85,13 +88,8 @@ class FriendsActivity : AppCompatActivity() {
             }
         }
 
-        friendsRef.addListenerForSingleValueEvent(usernameEventListener)
+        usersRef.addListenerForSingleValueEvent(usernameEventListener)
 
-        if (addFriendText != null) {
-            Log.d("username", username)
-            Log.d("friendId", friendId)
-            friendsRef.child(friendId).child("friends").child(username).setValue(userId)
-        }
     }
 
     private fun getFriends() {
@@ -120,7 +118,7 @@ class FriendsActivity : AppCompatActivity() {
 
         }
 
-        userFriendsRef.addListenerForSingleValueEvent(valueEventListener)
+        personRequestingRef.addListenerForSingleValueEvent(valueEventListener)
 
     }
 
