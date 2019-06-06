@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -52,6 +53,8 @@ class FriendsActivity : AppCompatActivity() {
             addFriendButton.setOnClickListener{
                 addFriendText = addFriendInput.text.toString()
                 addFriend(addFriendText)
+                Toast.makeText(this,"request sent", Toast.LENGTH_SHORT).show()
+                finish()
             }
 
             getFriends()
