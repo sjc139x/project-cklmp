@@ -17,25 +17,7 @@
                         <item
                                 android:id="@+id/nav_social_add_friend"
                                 android:icon="@drawable/gem_red"
-                                android:title="add a friend" />
-                    </group>
-                </menu>
-            </item>
-        </group>
-
-        <group android:checkableBehavior="single" android:layout_width="wrap_content"
-               android:layout_height="wrap_content">
-            <item android:title="TOURS">
-                <menu>
-                    <group android:checkableBehavior="single">
-                        <item
-                                android:id="@+id/nav_tours_view_tours"
-                                android:icon="@drawable/gem_red"
-                                android:title="view local tours" />
-                        <item
-                                android:id="@+id/nav_social_create_tour"
-                                android:icon="@drawable/gem_red"
-                                android:title="create a tour" />
+                                android:title="see friend's gems" />
                     </group>
                 </menu>
             </item>
