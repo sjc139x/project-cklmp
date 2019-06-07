@@ -53,7 +53,7 @@ class FriendsActivity : AppCompatActivity() {
             addFriendButton.setOnClickListener{
                 addFriendText = addFriendInput.text.toString()
                 addFriend(addFriendText)
-                Toast.makeText(this,"request sent", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Request sent.", Toast.LENGTH_SHORT).show()
                 finish()
             }
 
